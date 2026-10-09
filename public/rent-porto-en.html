@@ -21,6 +21,7 @@
     <link rel="preload" href="assets/fonts/bespoke.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" as="image" href="assets/img/hero.webp" media="(min-width: 821px)" />
     <link rel="preload" as="image" href="assets/img/hero-mobile.webp" media="(max-width: 820px)" />
+    <link rel="stylesheet" href="assets/vendor/intl-tel-input/css/intlTelInput.min.css" />
     <style>
       @font-face {
         font-family: "Gambarino";
@@ -641,6 +642,32 @@
           gap: 14px;
         }
       }
+
+      /* ---------- Telefone com indicativo (intl-tel-input) ---------- */
+      .iti {
+        width: 100%;
+        --iti-border-color: #ddd5c4;
+        --iti-hover-color: rgba(22, 21, 43, 0.06);
+      }
+      .iti__country-container button,
+      .iti__selected-country {
+        font-family: "Bespoke", serif;
+        color: var(--navy);
+      }
+      .iti__dropdown-content {
+        font-family: "Bespoke", serif;
+        font-size: 15px;
+        color: var(--navy);
+        background: #fbf9f4;
+        border: 1px solid #ddd5c4;
+      }
+      .iti__search-input {
+        padding: 10px 12px 10px 36px;
+        font-size: 15px;
+        border: 0;
+        border-bottom: 1px solid #ddd5c4;
+        background: #fbf9f4;
+      }
     </style>
   </head>
   <body>
@@ -961,19 +988,25 @@
             </div>
             <div class="row">
               <div>
-                <label for="phone">Phone (with country code)</label
+                <label for="phone">Phone</label
                 ><input
                   id="phone"
                   name="phone"
                   type="tel"
                   required
                   autocomplete="tel"
-                  placeholder="+351 ..."
                 />
               </div>
               <div>
                 <label for="email">Email</label
-                ><input id="email" name="email" type="email" required autocomplete="email" />
+                ><input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}"
+                />
               </div>
             </div>
             <div>
@@ -1071,6 +1104,7 @@
       </div>
     </footer>
 
+    <script src="assets/vendor/intl-tel-input/js/intlTelInputWithUtils.min.js"></script>
     <script>
       // Property references per typology (confirm they are still the active listings in Inmovilla).
       var REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043" };
@@ -1107,6 +1141,36 @@
       // ---- Envio: os dados vão para o Netlify Forms; depois abre a página de obrigado
       // (página de conversão do Google Ads). O email para a Inmovilla é enviado pela função
       // netlify/functions/submission-created.mjs.
+      // ---- Telefone: escolha do país (indicativo) e validação
+      var phoneInput = document.getElementById("phone");
+      var iti = window.intlTelInput(phoneInput, {
+        initialCountry: "pt",
+        countryOrder: ["pt", "es", "fr", "gb", "de", "br", "nl", "be", "ch", "it", "us"],
+        countryNameLocale: "en",
+        separateDialCode: true,
+        strictMode: true,
+        uiTranslations: {},
+      });
+      var PHONE_MSG = "Please enter a valid phone number for the selected country.";
+      phoneInput.addEventListener("input", function () {
+        phoneInput.setCustomValidity("");
+      });
+      phoneInput.addEventListener("countrychange", function () {
+        phoneInput.setCustomValidity("");
+      });
+
+      // ---- Email: só aceita emails com domínio válido (ex.: nome@exemplo.com)
+      var emailInput = document.getElementById("email");
+      var EMAIL_MSG = "Please enter a valid email, for example name@example.com.";
+      emailInput.addEventListener("invalid", function () {
+        if (emailInput.validity.typeMismatch || emailInput.validity.patternMismatch) {
+          emailInput.setCustomValidity(EMAIL_MSG);
+        }
+      });
+      emailInput.addEventListener("input", function () {
+        emailInput.setCustomValidity("");
+      });
+
       var THANKS_URL = "thank-you-en.html";
       var form = document.getElementById("lead"),
         btn = form.querySelector("button[type=submit]");
@@ -1115,8 +1179,15 @@
         if (form.website && form.website.value) {
           return;
         } // armadilha de spam
+        if (!iti.isValidNumber()) {
+          phoneInput.setCustomValidity(PHONE_MSG);
+          phoneInput.reportValidity();
+          return;
+        }
         btn.disabled = true;
-        var body = new URLSearchParams(new FormData(form)).toString();
+        var data = new URLSearchParams(new FormData(form));
+        data.set("phone", iti.getNumber()); // número completo com indicativo, ex: +351912345678
+        var body = data.toString();
         fetch("/", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
