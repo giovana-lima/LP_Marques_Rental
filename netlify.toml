@@ -2,7 +2,14 @@
   publish = "public"
   functions = "netlify/functions"
 
-# A raiz do subdomínio abre a página em português
+# rent-marques.youropapt.com -> página em inglês
+[[redirects]]
+  from = "https://rent-marques.youropapt.com/"
+  to = "/rent-porto-en.html"
+  status = 200
+  force = true
+
+# arrendar-marques.youropapt.com (e qualquer outro domínio) -> página em português
 [[redirects]]
   from = "/"
   to = "/rent-porto-pt.html"
