@@ -1,0 +1,9 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+# A raiz do subdomínio abre a página em português
+[[redirects]]
+  from = "/"
+  to = "/rent-porto-pt.html"
+  status = 200
