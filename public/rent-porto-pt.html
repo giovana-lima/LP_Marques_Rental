@@ -694,19 +694,19 @@
               Apartamentos para arrendar na Rua do Bonjardim, junto ao metro do Marquês, Porto
             </h1>
             <p>Novos T0, T1 e T2 com estacionamento e varanda incluídos. A partir de €900/mês.</p>
-            <a class="btn" href="#form">Pedir informações</a>
+            <a class="btn" href="#contact">Pedir informações</a>
           </div>
         </div>
       </section>
 
-      <section>
+      <section id="apartments">
         <div class="wrap">
           <h2>Escolha a sua casa</h2>
           <p class="note">
             Todos com estacionamento e varanda incluídos. Sem mobília, arrendamento de longa
             duração.
           </p>
-          <div class="cards">
+          <div class="cards" id="prices">
             <article class="card">
               <div class="ph">
                 <img
@@ -719,7 +719,7 @@
                 <span class="type">T0 · Estúdio</span>
                 <h3>Novo estúdio junto ao metro do Marquês, com estacionamento incluído.</h3>
                 <div class="price"><small>A partir de</small> €900<small>/mês</small></div>
-                <a class="btn" href="#form" data-pick="T0">Pedir informações</a>
+                <a class="btn" href="#contact" data-pick="T0">Pedir informações</a>
               </div>
             </article>
             <article class="card">
@@ -734,7 +734,7 @@
                 <span class="type">T1 · Duplex</span>
                 <h3>Um duplex T1 com estacionamento, na Rua do Bonjardim.</h3>
                 <div class="price"><small>A partir de</small> €1.300<small>/mês</small></div>
-                <a class="btn" href="#form" data-pick="T1">Pedir informações</a>
+                <a class="btn" href="#contact" data-pick="T1">Pedir informações</a>
               </div>
             </article>
             <article class="card">
@@ -749,14 +749,14 @@
                 <span class="type">T2 · Duplex</span>
                 <h3>Um novo duplex T2 na Rua do Bonjardim.</h3>
                 <div class="price"><small>A partir de</small> €1.500<small>/mês</small></div>
-                <a class="btn" href="#form" data-pick="T2">Pedir informações</a>
+                <a class="btn" href="#contact" data-pick="T2">Pedir informações</a>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="plans" style="background: var(--cream2); padding-top: 0">
+      <section class="plans" id="features" style="background: var(--cream2); padding-top: 0">
         <div class="wrap">
           <h2>Plantas</h2>
           <div class="tabs" role="tablist">
@@ -920,7 +920,7 @@
         </div>
       </section>
 
-      <section class="why">
+      <section class="why" id="location">
         <div class="wrap">
           <h2>Porquê aqui</h2>
           <div class="whys">
@@ -981,8 +981,8 @@
         </div>
       </section>
 
-      <section class="formsec" id="form">
-        <div class="wrap">
+      <section class="formsec" id="contact">
+        <div class="wrap" id="form">
           <h2>Pedir informações</h2>
           <p class="note">Diga-nos o que procura. Respondemos o mais rapidamente possível.</p>
           <!-- Formulário recebido pelo Netlify Forms. O email para a Inmovilla é enviado pela
@@ -1153,6 +1153,15 @@
         if (el && q.get(k)) el.value = q.get(k);
       });
       document.getElementById("campaign").value = q.get("utm_campaign") || "";
+      // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1 ou ?type=T2
+      // Pré-seleciona a tipologia no formulário e abre a planta correspondente.
+      var typeParam = (q.get("type") || "").toUpperCase();
+      if (REFS[typeParam]) {
+        type.value = typeParam;
+        setRef();
+        var planTab = document.querySelector('.tab[data-t="' + typeParam.charAt(1) + '"]');
+        if (planTab) planTab.click();
+      }
       // ---- Envio: os dados vão para o Netlify Forms; depois abre a página de obrigado
       // (página de conversão do Google Ads). O email para a Inmovilla é enviado pela função
       // netlify/functions/submission-created.mjs.

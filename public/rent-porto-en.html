@@ -690,16 +690,16 @@
             <span class="tag">Long-term rental</span>
             <h1>Apartments for rent on Rua do Bonjardim, near Marquês metro, Porto</h1>
             <p>New T0, T1 and T2 homes with parking and a balcony included. From €900/month.</p>
-            <a class="btn" href="#form">Request details</a>
+            <a class="btn" href="#contact">Request details</a>
           </div>
         </div>
       </section>
 
-      <section>
+      <section id="apartments">
         <div class="wrap">
           <h2>Pick your home</h2>
           <p class="note">All with parking and balcony included. Unfurnished, long-term rental.</p>
-          <div class="cards">
+          <div class="cards" id="prices">
             <article class="card">
               <div class="ph">
                 <img
@@ -712,7 +712,7 @@
                 <span class="type">T0 · Studio</span>
                 <h3>New studio near Marquês metro, with parking included.</h3>
                 <div class="price"><small>From</small> €900<small>/month</small></div>
-                <a class="btn" href="#form" data-pick="T0">Request details</a>
+                <a class="btn" href="#contact" data-pick="T0">Request details</a>
               </div>
             </article>
             <article class="card">
@@ -727,7 +727,7 @@
                 <span class="type">T1 · Duplex</span>
                 <h3>A 1-bedroom duplex with parking, on Rua do Bonjardim.</h3>
                 <div class="price"><small>From</small> €1,300<small>/month</small></div>
-                <a class="btn" href="#form" data-pick="T1">Request details</a>
+                <a class="btn" href="#contact" data-pick="T1">Request details</a>
               </div>
             </article>
             <article class="card">
@@ -742,14 +742,14 @@
                 <span class="type">T2 · Duplex</span>
                 <h3>A brand-new T2 duplex on Rua do Bonjardim.</h3>
                 <div class="price"><small>From</small> €1,500<small>/month</small></div>
-                <a class="btn" href="#form" data-pick="T2">Request details</a>
+                <a class="btn" href="#contact" data-pick="T2">Request details</a>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="plans" style="background: var(--cream2); padding-top: 0">
+      <section class="plans" id="features" style="background: var(--cream2); padding-top: 0">
         <div class="wrap">
           <h2>Floor plans</h2>
           <div class="tabs" role="tablist">
@@ -907,7 +907,7 @@
         </div>
       </section>
 
-      <section class="why">
+      <section class="why" id="location">
         <div class="wrap">
           <h2>Why here</h2>
           <div class="whys">
@@ -965,8 +965,8 @@
         </div>
       </section>
 
-      <section class="formsec" id="form">
-        <div class="wrap">
+      <section class="formsec" id="contact">
+        <div class="wrap" id="form">
           <h2>Request details</h2>
           <p class="note">
             Tell us what you&#x27;re looking for. We&#x27;ll reply as soon as possible.
@@ -1138,6 +1138,15 @@
         if (el && q.get(k)) el.value = q.get(k);
       });
       document.getElementById("campaign").value = q.get("utm_campaign") || "";
+      // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1 ou ?type=T2
+      // Pré-seleciona a tipologia no formulário e abre a planta correspondente.
+      var typeParam = (q.get("type") || "").toUpperCase();
+      if (REFS[typeParam]) {
+        type.value = typeParam;
+        setRef();
+        var planTab = document.querySelector('.tab[data-t="' + typeParam.charAt(1) + '"]');
+        if (planTab) planTab.click();
+      }
       // ---- Envio: os dados vão para o Netlify Forms; depois abre a página de obrigado
       // (página de conversão do Google Ads). O email para a Inmovilla é enviado pela função
       // netlify/functions/submission-created.mjs.
