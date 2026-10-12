@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arrendar-marques.youropapt.com/sitemap.xml

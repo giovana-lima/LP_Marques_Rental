@@ -2,6 +2,57 @@
   publish = "public"
   functions = "netlify/functions"
 
+# ---------------------------------------------------------------------------
+# Endereços oficiais:
+#   arrendar-marques.youropapt.com  -> página PT (+ /obrigado-pt.html)
+#   rent-marques.youropapt.com      -> página EN (+ /thank-you-en.html)
+# Tudo o resto é redirecionado (301) para o endereço oficial, para evitar
+# conteúdo duplicado no Google.
+# ---------------------------------------------------------------------------
+
+# Endereço técnico do Netlify -> subdomínio PT
+[[redirects]]
+  from = "https://animated-zabaione-b63b0f.netlify.app/*"
+  to = "https://arrendar-marques.youropapt.com/:splat"
+  status = 301
+  force = true
+
+# rent-marques: páginas PT pertencem ao subdomínio PT
+[[redirects]]
+  from = "https://rent-marques.youropapt.com/rent-porto-pt.html"
+  to = "https://arrendar-marques.youropapt.com/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://rent-marques.youropapt.com/obrigado-pt.html"
+  to = "https://arrendar-marques.youropapt.com/obrigado-pt.html"
+  status = 301
+  force = true
+
+# arrendar-marques: páginas EN pertencem ao subdomínio EN
+[[redirects]]
+  from = "https://arrendar-marques.youropapt.com/rent-porto-en.html"
+  to = "https://rent-marques.youropapt.com/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "https://arrendar-marques.youropapt.com/thank-you-en.html"
+  to = "https://rent-marques.youropapt.com/thank-you-en.html"
+  status = 301
+  force = true
+
+# rent-marques: robots.txt e sitemap próprios
+[[redirects]]
+  from = "https://rent-marques.youropapt.com/robots.txt"
+  to = "/robots-en.txt"
+  status = 200
+  force = true
+[[redirects]]
+  from = "https://rent-marques.youropapt.com/sitemap.xml"
+  to = "/sitemap-en.xml"
+  status = 200
+  force = true
+
 # rent-marques.youropapt.com -> página em inglês
 [[redirects]]
   from = "https://rent-marques.youropapt.com/"
@@ -9,7 +60,7 @@
   status = 200
   force = true
 
-# arrendar-marques.youropapt.com (e qualquer outro domínio) -> página em português
+# arrendar-marques.youropapt.com -> página em português
 [[redirects]]
   from = "/"
   to = "/rent-porto-pt.html"
