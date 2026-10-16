@@ -19,17 +19,29 @@
         });
       });
 
-      // ---- Animação ao aparecer
+      // ---- Animação ao aparecer + números a contar (uma vez, ao entrar no ecrã)
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function countUp(el) {
+        var to = parseInt(el.getAttribute("data-to"), 10), t0 = null, dur = 1200;
+        if (reduce) return;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min((ts - t0) / dur, 1);
+          el.textContent = Math.round(to * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) {
             if (!en.isIntersecting) return;
-            en.target.classList.add("in");
+            if (en.target.classList.contains("count")) countUp(en.target);
+            else en.target.classList.add("in");
             io.unobserve(en.target);
           });
         }, { threshold: 0.15 });
-        document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+        document.querySelectorAll(".reveal, .count").forEach(function (el) { io.observe(el); });
       } else {
         document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
       }

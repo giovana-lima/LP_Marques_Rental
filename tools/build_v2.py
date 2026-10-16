@@ -45,12 +45,13 @@ T = {
              'Viver aqui significa acompanhar o ritmo da cidade sem abdicar de um espaço reservado para descansar. Do estúdio ao duplex, há uma casa para cada fase da vida.'],
   concept_quote='Edifício novo, arrendamento de longa duração.',
   concept_alt='Sala de estar de um apartamento no Jardins do Marquês',
+  stats=[('170', 'm', 'do metro do Marquês'), ('3', '', 'tipologias: T0, T1 e T2'), ('900', '€/mês', 'renda desde'), ('100', '%', 'com varanda e lugar de garagem')],
   loc_k='02 — Localização', loc_h='No centro de tudo, num bairro tranquilo.',
   loc_p='A Rua do Bonjardim liga o Marquês à Baixa. O metro, os autocarros, o comércio e os serviços estão a poucos minutos a pé.',
   loc_list=[('Metro do Marquês', '170 m'), ('Paragens de autocarro', '180 m'), ('Supermercado', '220 m'), ('Escola', '300 m'),
             ('Praça da República', '800 m'), ('Metro da Trindade', '1 km'), ('Rua de Santa Catarina e Baixa', 'poucos minutos'), ('Polo universitário', 'acesso direto de metro')],
   loc_alt='Vista aérea da Praça do Marquês e do Jardins do Marquês', map_title='Mapa', maps='Abrir no Google Maps',
-  slides=[('varanda-estudio', 'Varandas privativas em todas as casas'), ('cozinha', 'Cozinhas equipadas com bancada em granito'),
+  slides=[('varanda-render', 'Varandas privativas em todas as casas'), ('cozinha', 'Cozinhas equipadas com bancada em granito'),
           ('garagem', 'Lugar de garagem incluído'), ('cobertura', 'Painéis fotovoltaicos na cobertura')],
   prev='Anterior', next='Seguinte',
   bld_k='03 — O edifício', bld_h='Uma arquitetura feita para durar.',
@@ -108,12 +109,13 @@ T = {
              'Living here means keeping up with the city while having a calm place to rest. From studio to duplex, there is a home for every stage of life.'],
   concept_quote='Brand-new building, long-term rental.',
   concept_alt='Living room of an apartment at Jardins do Marquês',
+  stats=[('170', 'm', 'from Marquês metro'), ('3', '', 'apartment types: T0, T1 and T2'), ('900', '€/month', 'rent from'), ('100', '%', 'with balcony and parking space')],
   loc_k='02 — Location', loc_h='Close to everything, in a quiet neighbourhood.',
   loc_p='Rua do Bonjardim links Marquês to the city centre. Metro, buses, shops and services are a few minutes away on foot.',
   loc_list=[('Marquês metro', '170 m'), ('Bus stops', '180 m'), ('Supermarket', '220 m'), ('School', '300 m'),
             ('Praça da República', '800 m'), ('Trindade metro', '1 km'), ('Rua de Santa Catarina and Baixa', 'a few minutes'), ('University area', 'direct by metro')],
   loc_alt='Aerial view of Praça do Marquês and Jardins do Marquês', map_title='Map', maps='Open in Google Maps',
-  slides=[('varanda-estudio', 'Private balconies in every home'), ('cozinha', 'Fitted kitchens with granite worktops'),
+  slides=[('varanda-render', 'Private balconies in every home'), ('cozinha', 'Fitted kitchens with granite worktops'),
           ('garagem', 'Parking space included'), ('cobertura', 'Solar panels on the roof')],
   prev='Previous', next='Next',
   bld_k='03 — The building', bld_h='Architecture built to last.',
@@ -176,7 +178,7 @@ def build(lang):
     nav = ''.join(f'<a href="#{i}">{e(l)}</a>' for i, l in t['nav'])
     loc = ''.join(f'<li><span class="n">{k+1:02d}</span><span class="p">{e(a)}</span><span class="d">{e(b)}</span></li>' for k, (a, b) in enumerate(t['loc_list']))
     # No telemóvel, a 1.ª foto do carrossel é a imagem da varanda (mostra melhor a varanda num ecrã vertical)
-    MOBILE_SLIDE = {0: 'varanda-render'}
+    MOBILE_SLIDE = {}
     def slide_img(k, f, c):
         img = f'<img src="{IMG}{f}.webp" alt="{e(c)}" loading="lazy" width="1920" height="1280">'
         if k in MOBILE_SLIDE:
@@ -204,6 +206,7 @@ def build(lang):
               <a class="btn" href="#contact" data-pick="{a['code']}">{e(t['cta'])}</a>
             </div>
           </div>'''
+    stats = ''.join(f'<li class="stat"><p class="num"><span class="count" data-to="{n}">{n}</span>{f"<small>{e(u)}</small>" if u else ""}</p><p class="lbl">{e(l)}</p></li>' for n, u, l in t['stats'])
     gal = ''.join(f'<button type="button" class="gi" data-full="{IMG}{f}.webp" data-cap="{e(c)}"><img src="{IMG}{f}-sm.webp" alt="{e(c)}" loading="lazy"></button>' for f, c in t['gallery'])
     steps = ''.join(f'<li><b>{k+1}</b>{e(s)}</li>' for k, s in enumerate(t['steps']))
     opt = lambda pairs: ''.join(f'<option value="{e(v)}">{e(l)}</option>' for v, l in pairs)
@@ -266,6 +269,10 @@ def build(lang):
           </div>
           <figure class="imgtall reveal"><img src="{IMG}sala.webp" alt="{e(t['concept_alt'])}" loading="lazy" width="1920" height="1280"></figure>
         </div>
+      </section>
+
+      <section class="stats" aria-label="Jardins do Marquês">
+        <ul class="wrap statsin">{stats}</ul>
       </section>
 
       <section class="sec location" id="location">

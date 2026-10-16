@@ -350,6 +350,15 @@
       .small { font-size: 13.5px; margin-top: 18px; }
       .head { margin-bottom: 44px; }
 
+      /* Números */
+      .stats { background: var(--navy); color: #fff; }
+      .statsin { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); }
+      .stat { padding: clamp(44px, 6vw, 72px) clamp(16px, 2.4vw, 32px); text-align: center; }
+      .stat + .stat { box-shadow: inset 1px 0 0 var(--line-d); }
+      .num { font: 400 clamp(42px, 4.6vw, 60px)/1 var(--serif); color: var(--gold); font-variant-numeric: lining-nums tabular-nums; margin-bottom: 14px; }
+      .num small { font: 400 0.32em/1 var(--sans); letter-spacing: 0.04em; color: var(--cream); margin-left: 5px; }
+      .lbl { font-size: 15px; line-height: 1.45; color: var(--cream); max-width: 20ch; margin: 0 auto; text-wrap: balance; }
+
       /* Localização */
       .location { background: var(--paper); }
       .loc { align-items: start; }
@@ -476,6 +485,9 @@
         .topright { margin-left: auto; position: relative; z-index: 2; }
         .burger { display: block; }
         .topright .btn-sm { display: none; }
+        .statsin { grid-template-columns: repeat(2, 1fr); }
+        .stat:nth-child(3) { box-shadow: inset 0 1px 0 var(--line-d); }
+        .stat:nth-child(4) { box-shadow: inset 1px 0 0 var(--line-d), inset 0 1px 0 var(--line-d); }
         .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
         .gi:nth-child(n) { grid-column: auto; grid-row: auto; }
         .gi:nth-child(1), .gi:nth-child(8) { grid-column: span 2; grid-row: span 2; }
@@ -560,6 +572,10 @@
         </div>
       </section>
 
+      <section class="stats" aria-label="Jardins do Marquês">
+        <ul class="wrap statsin"><li class="stat"><p class="num"><span class="count" data-to="170">170</span><small>m</small></p><p class="lbl">from Marquês metro</p></li><li class="stat"><p class="num"><span class="count" data-to="3">3</span></p><p class="lbl">apartment types: T0, T1 and T2</p></li><li class="stat"><p class="num"><span class="count" data-to="900">900</span><small>€/month</small></p><p class="lbl">rent from</p></li><li class="stat"><p class="num"><span class="count" data-to="100">100</span><small>%</small></p><p class="lbl">with balcony and parking space</p></li></ul>
+      </section>
+
       <section class="sec location" id="location">
         <div class="wrap grid2 loc">
           <figure class="imgwide reveal"><img style="object-position: 72% 50%" src="assets/img/v2/aerea-marques.webp" alt="Aerial view of Praça do Marquês and Jardins do Marquês" loading="lazy" width="1920" height="1080"></figure>
@@ -578,7 +594,7 @@
       </section>
 
       <section class="slider" aria-roledescription="carousel">
-        <div class="track" id="track"><figure class="slide"><picture class="m-alt"><source media="(max-width: 800px)" srcset="assets/img/v2/varanda-render.webp"><img src="assets/img/v2/varanda-estudio.webp" alt="Private balconies in every home" loading="lazy" width="1920" height="1280"></picture><figcaption><span>1/4</span>Private balconies in every home</figcaption></figure><figure class="slide"><img src="assets/img/v2/cozinha.webp" alt="Fitted kitchens with granite worktops" loading="lazy" width="1920" height="1280"><figcaption><span>2/4</span>Fitted kitchens with granite worktops</figcaption></figure><figure class="slide"><img src="assets/img/v2/garagem.webp" alt="Parking space included" loading="lazy" width="1920" height="1280"><figcaption><span>3/4</span>Parking space included</figcaption></figure><figure class="slide"><img src="assets/img/v2/cobertura.webp" alt="Solar panels on the roof" loading="lazy" width="1920" height="1280"><figcaption><span>4/4</span>Solar panels on the roof</figcaption></figure></div>
+        <div class="track" id="track"><figure class="slide"><img src="assets/img/v2/varanda-render.webp" alt="Private balconies in every home" loading="lazy" width="1920" height="1280"><figcaption><span>1/4</span>Private balconies in every home</figcaption></figure><figure class="slide"><img src="assets/img/v2/cozinha.webp" alt="Fitted kitchens with granite worktops" loading="lazy" width="1920" height="1280"><figcaption><span>2/4</span>Fitted kitchens with granite worktops</figcaption></figure><figure class="slide"><img src="assets/img/v2/garagem.webp" alt="Parking space included" loading="lazy" width="1920" height="1280"><figcaption><span>3/4</span>Parking space included</figcaption></figure><figure class="slide"><img src="assets/img/v2/cobertura.webp" alt="Solar panels on the roof" loading="lazy" width="1920" height="1280"><figcaption><span>4/4</span>Solar panels on the roof</figcaption></figure></div>
         <div class="sliderctl">
           <button type="button" class="arrow" data-dir="-1" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
           <button type="button" class="arrow" data-dir="1" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
@@ -744,17 +760,29 @@
         });
       });
 
-      // ---- Animação ao aparecer
+      // ---- Animação ao aparecer + números a contar (uma vez, ao entrar no ecrã)
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function countUp(el) {
+        var to = parseInt(el.getAttribute("data-to"), 10), t0 = null, dur = 1200;
+        if (reduce) return;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min((ts - t0) / dur, 1);
+          el.textContent = Math.round(to * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) {
             if (!en.isIntersecting) return;
-            en.target.classList.add("in");
+            if (en.target.classList.contains("count")) countUp(en.target);
+            else en.target.classList.add("in");
             io.unobserve(en.target);
           });
         }, { threshold: 0.15 });
-        document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+        document.querySelectorAll(".reveal, .count").forEach(function (el) { io.observe(el); });
       } else {
         document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
       }
