@@ -175,7 +175,14 @@ def build(lang):
     head_top, seo, gtm_ns, footer, title, desc = old_parts(lang)
     nav = ''.join(f'<a href="#{i}">{e(l)}</a>' for i, l in t['nav'])
     loc = ''.join(f'<li><span class="n">{k+1:02d}</span><span class="p">{e(a)}</span><span class="d">{e(b)}</span></li>' for k, (a, b) in enumerate(t['loc_list']))
-    slides = ''.join(f'<figure class="slide"><img src="{IMG}{f}.webp" alt="{e(c)}" loading="lazy" width="1920" height="1280"><figcaption><span>{k+1}/{len(t["slides"])}</span>{e(c)}</figcaption></figure>' for k, (f, c) in enumerate(t['slides']))
+    # No telemóvel, a 1.ª foto do carrossel é a imagem da varanda (mostra melhor a varanda num ecrã vertical)
+    MOBILE_SLIDE = {0: 'varanda-render'}
+    def slide_img(k, f, c):
+        img = f'<img src="{IMG}{f}.webp" alt="{e(c)}" loading="lazy" width="1920" height="1280">'
+        if k in MOBILE_SLIDE:
+            return f'<picture class="m-alt"><source media="(max-width: 800px)" srcset="{IMG}{MOBILE_SLIDE[k]}.webp">{img}</picture>'
+        return img
+    slides = ''.join(f'<figure class="slide">{slide_img(k, f, c)}<figcaption><span>{k+1}/{len(t["slides"])}</span>{e(c)}</figcaption></figure>' for k, (f, c) in enumerate(t['slides']))
     amen = ''.join(f'<li>{ICON_CHECK}<span>{e(a)}</span></li>' for a in t['amen'])
     tabs = ''.join(f'<button type="button" class="tab" role="tab" id="tab-{a["code"]}" aria-controls="pn-{a["code"]}" aria-selected="{"true" if k == 0 else "false"}" tabindex="{0 if k == 0 else -1}" data-t="{a["code"]}">{e(a["tab"])}</button>' for k, a in enumerate(t['apts']))
     panels = ''
