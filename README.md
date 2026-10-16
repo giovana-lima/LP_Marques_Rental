@@ -48,3 +48,10 @@ package.json                 dependência (nodemailer)
 
 Em *Domain management*, adicionar o subdomínio (ex.: `arrendar.youropapt.com`) e criar o registo CNAME indicado pelo Netlify.
 As duas línguas ficam no mesmo site: `/` (PT) e `/rent-porto-en.html` (EN). O botão de idioma funciona assim.
+
+## Editar a landing page (versão "Jardins do Marquês")
+
+As páginas `public/rent-porto-pt.html` e `public/rent-porto-en.html` são geradas por `tools/build_v2.py`
+(textos PT/EN no início do ficheiro), `tools/v2.css` (estilo) e `tools/v2.js` (funcionamento).
+Depois de alterar, correr `python3 tools/build_v2.py`. O Cookiebot, o GTM, o SEO e o rodapé são
+mantidos a partir das páginas atuais. As fotos novas estão em `public/assets/img/v2/`.
