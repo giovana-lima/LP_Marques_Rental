@@ -1,3 +1,5 @@
+      window.__lpReady = true; // o conteúdo só fica escondido para animar se este script correr
+
       // ---- Cabeçalho: fica sólido ao fazer scroll; menu no telemóvel
       var topbar = document.getElementById("top");
       function onScroll() { topbar.classList.toggle("solid", window.scrollY > 40); }
@@ -17,30 +19,17 @@
         });
       });
 
-      // ---- Animação ao aparecer + números a contar
+      // ---- Animação ao aparecer
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      function countUp(el) {
-        var to = parseInt(el.getAttribute("data-to"), 10), t0 = null, dur = 1400;
-        if (reduce) { el.textContent = to; return; }
-        function step(ts) {
-          if (!t0) t0 = ts;
-          var p = Math.min((ts - t0) / dur, 1);
-          el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-          if (p < 1) requestAnimationFrame(step);
-        }
-        el.textContent = "0";
-        requestAnimationFrame(step);
-      }
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) {
             if (!en.isIntersecting) return;
-            if (en.target.classList.contains("count")) countUp(en.target);
-            else en.target.classList.add("in");
+            en.target.classList.add("in");
             io.unobserve(en.target);
           });
         }, { threshold: 0.15 });
-        document.querySelectorAll(".reveal, .count").forEach(function (el) { io.observe(el); });
+        document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
       } else {
         document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
       }
@@ -61,12 +50,23 @@
       // ---- Separadores das tipologias
       function showType(code) {
         document.querySelectorAll(".tab").forEach(function (x) {
-          x.setAttribute("aria-selected", x.getAttribute("data-t") === code ? "true" : "false");
+          var on = x.getAttribute("data-t") === code;
+          x.setAttribute("aria-selected", on ? "true" : "false");
+          x.tabIndex = on ? 0 : -1;
         });
         document.querySelectorAll(".panel").forEach(function (p) { p.classList.toggle("on", p.id === "pn-" + code); });
       }
-      document.querySelectorAll(".tab").forEach(function (b) {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+      tabs.forEach(function (b, i) {
         b.addEventListener("click", function () { showType(b.getAttribute("data-t")); });
+        b.addEventListener("keydown", function (ev) {
+          var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[ev.key];
+          if (k === undefined) return;
+          ev.preventDefault();
+          var nb = tabs[(k + tabs.length) % tabs.length];
+          showType(nb.getAttribute("data-t"));
+          nb.focus();
+        });
       });
 
       // ---- Galeria e plantas em ecrã inteiro
@@ -161,6 +161,8 @@
           return;
         }
         btn.disabled = true;
+        var btnLabel = btn.textContent;
+        btn.textContent = "__SENDING__";
         var data = new URLSearchParams(new FormData(form));
         data.set("phone", iti.getNumber()); // número completo com indicativo, ex: +351912345678
         fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: data.toString() })
@@ -170,6 +172,7 @@
           })
           .catch(function () {
             btn.disabled = false;
+            btn.textContent = btnLabel;
             alert("__ERR__");
           });
       });

@@ -271,6 +271,11 @@
         ]
       }
     </script>
+    <meta name="theme-color" content="#16152b" />
+    <script>
+      document.documentElement.classList.add("js");
+      setTimeout(function () { if (!window.__lpReady) document.documentElement.classList.remove("js"); }, 3000);
+    </script>
     <style>
       @font-face { font-family: "Gambarino"; src: url(assets/fonts/gambarino.woff2) format("woff2"); font-display: swap; }
       @font-face { font-family: "Bespoke"; src: url(assets/fonts/bespoke.woff2) format("woff2"); font-display: swap; }
@@ -279,9 +284,16 @@
         --paper: #fbf9f4; --muted: #5b5974; --line: #ebe3d3; --line-d: rgba(226, 218, 203, 0.18);
         --serif: "Gambarino", Georgia, serif; --sans: "Bespoke", Georgia, serif;
         --gut: clamp(20px, 5vw, 64px);
+        --gold-ink: #86662b; /* dourado legível sobre fundos claros (contraste 4,6:1) */
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
       }
       * { box-sizing: border-box; margin: 0; padding: 0; }
-      html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+      html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+      ::selection { background: var(--gold); color: var(--navy); }
+      a, button, .tab { touch-action: manipulation; }
+      button, .btn, .tab { user-select: none; -webkit-user-select: none; }
+      :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+      .tab:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
       body { font-family: var(--sans); background: var(--cream2); color: var(--navy); font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
       img { display: block; max-width: 100%; height: auto; }
       a { color: inherit; }
@@ -289,10 +301,10 @@
       .wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--gut); }
 
       /* Botões */
-      .btn { display: inline-block; background: var(--gold); color: var(--navy); padding: 16px 32px; border: 1px solid var(--gold); border-radius: 0; text-decoration: none; font: 14px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: background 0.25s, color 0.25s; }
-      .btn:hover { background: #ecc98a; }
+      .btn { display: inline-block; background: var(--gold); color: var(--navy); padding: 16px 32px; border: 1px solid var(--gold); border-radius: 0; text-decoration: none; font: 14px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: background-color 200ms ease, color 200ms ease, transform 160ms var(--ease-out); }
+      .btn:active, .arrow:active, .lbnav:active, .plan:active, .tab:active { transform: scale(0.97); }
+      .gi:active { transform: scale(0.985); }
       .btn-line { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.7); }
-      .btn-line:hover { background: #fff; color: var(--navy); }
       .btn-sm { padding: 11px 18px; font-size: 12px; }
 
       /* Cabeçalho fixo */
@@ -302,23 +314,21 @@
       .logo img { height: 22px; width: auto; }
       .mainnav { display: flex; gap: 30px; margin-left: auto; }
       .mainnav a { color: #fff; text-decoration: none; font-size: 12.5px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.88; }
-      .mainnav a:hover { opacity: 1; color: var(--gold); }
       .mainnav .navcta { display: none; }
       .topright { display: flex; align-items: center; gap: 14px; }
-      .lang { color: #fff; text-decoration: none; font-size: 12.5px; letter-spacing: 0.14em; border: 1px solid rgba(255, 255, 255, 0.45); padding: 8px 12px; }
-      .lang:hover { border-color: var(--gold); color: var(--gold); }
-      .burger { display: none; width: 42px; height: 42px; background: none; border: 1px solid rgba(255, 255, 255, 0.45); cursor: pointer; position: relative; }
+      .lang { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; color: #fff; text-decoration: none; font-size: 12.5px; letter-spacing: 0.14em; border: 1px solid rgba(255, 255, 255, 0.45); padding: 0 12px; }
+      .burger { display: none; width: 44px; height: 44px; background: none; border: 1px solid rgba(255, 255, 255, 0.45); cursor: pointer; position: relative; }
       .burger span { position: absolute; left: 11px; right: 11px; height: 1.5px; background: #fff; transition: transform 0.25s, top 0.25s; }
-      .burger span:first-child { top: 16px; } .burger span:last-child { top: 24px; }
-      .burger[aria-expanded="true"] span:first-child { top: 20px; transform: rotate(45deg); }
-      .burger[aria-expanded="true"] span:last-child { top: 20px; transform: rotate(-45deg); }
+      .burger span:first-child { top: 17px; } .burger span:last-child { top: 25px; }
+      .burger[aria-expanded="true"] span:first-child { top: 21px; transform: rotate(45deg); }
+      .burger[aria-expanded="true"] span:last-child { top: 21px; transform: rotate(-45deg); }
 
       /* Hero */
       .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; color: #fff; overflow: hidden; background: var(--navy); }
       .hero picture, .hero picture img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
       .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(22, 21, 43, 0.55) 0%, rgba(22, 21, 43, 0) 28%, rgba(22, 21, 43, 0.45) 50%, rgba(22, 21, 43, 0.92) 100%), linear-gradient(90deg, rgba(22, 21, 43, 0.6) 0%, rgba(22, 21, 43, 0) 60%); }
       .herotxt { position: relative; z-index: 1; max-width: 1240px; width: 100%; margin: 0 auto; padding: 0 var(--gut) clamp(56px, 10vh, 110px); }
-      .eyebrow, .kicker { display: block; font-size: 12.5px; letter-spacing: 0.28em; text-transform: uppercase; }
+      .eyebrow { display: block; font-size: 12.5px; letter-spacing: 0.28em; text-transform: uppercase; }
       .eyebrow { color: var(--cream); margin-bottom: 22px; text-shadow: 0 1px 12px rgba(22, 21, 43, 0.6); }
       .hero h1 { font-size: clamp(44px, 7.4vw, 104px); max-width: 12ch; margin-bottom: 22px; }
       .hero p { max-width: 560px; font-size: clamp(17px, 1.5vw, 19px); color: rgba(255, 255, 255, 0.9); margin-bottom: 34px; line-height: 1.55; }
@@ -326,30 +336,23 @@
 
       /* Secções */
       .sec { padding: clamp(80px, 12vw, 150px) 0; }
-      .kicker { color: #8a87a3; margin-bottom: 20px; }
       .sec h2 { font-size: clamp(36px, 4.8vw, 62px); margin-bottom: 26px; max-width: 16ch; }
       .txt p { color: var(--muted); max-width: 52ch; margin-bottom: 16px; }
       .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 7vw, 110px); align-items: center; }
       .imgtall img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
       .imgwide img { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; }
-      .quote { font-family: var(--serif); font-size: 26px; line-height: 1.25; color: var(--navy) !important; margin-top: 26px; padding-left: 20px; border-left: 2px solid var(--gold); }
+      .quote { font-family: var(--serif); font-size: 26px; line-height: 1.25; color: var(--navy) !important; margin-top: 30px; padding-top: 22px; position: relative; }
+      .quote::before { content: ""; position: absolute; top: 0; left: 0; width: 48px; height: 1px; background: var(--gold-ink); }
       .note { color: var(--muted); }
       .small { font-size: 13.5px; margin-top: 18px; }
       .head { margin-bottom: 44px; }
-
-      /* Números */
-      .stats { background: var(--navy); color: #fff; padding: clamp(56px, 8vw, 90px) 0; }
-      .statsin { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-      .stat { border-left: 1px solid var(--line-d); padding-left: 24px; }
-      .stat b { display: block; font: 400 clamp(44px, 5.4vw, 72px)/1 var(--serif); color: var(--gold); margin-bottom: 12px; }
-      .stat > span { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream); }
 
       /* Localização */
       .location { background: var(--paper); }
       .loc { align-items: start; }
       .poi { list-style: none; margin-top: 30px; border-top: 1px solid var(--line); }
       .poi li { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
-      .poi .n { font-family: var(--serif); color: var(--gold); font-size: 18px; }
+      .poi .n { font-family: var(--serif); color: var(--gold-ink); font-size: 18px; }
       .poi .d { color: var(--muted); font-size: 14.5px; text-align: right; }
       .mapwrap { margin-top: clamp(50px, 7vw, 90px); }
       .mapbox { height: clamp(320px, 42vw, 480px); background: var(--navy); }
@@ -366,31 +369,29 @@
       .slide figcaption { position: absolute; z-index: 1; left: var(--gut); bottom: clamp(30px, 6vh, 60px); color: #fff; font: 400 clamp(26px, 3.4vw, 44px)/1.1 var(--serif); max-width: 20ch; }
       .slide figcaption span { display: block; font: 13px/1 var(--sans); letter-spacing: 0.2em; color: var(--gold); margin-bottom: 14px; }
       .sliderctl { position: absolute; right: var(--gut); bottom: clamp(30px, 6vh, 60px); display: flex; gap: 10px; z-index: 2; }
-      .arrow, .lbnav { width: 54px; height: 54px; border: 1px solid rgba(255, 255, 255, 0.6); background: rgba(22, 21, 43, 0.3); color: #fff; cursor: pointer; display: grid; place-items: center; }
-      .arrow:hover, .lbnav:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+      .arrow, .lbnav { width: 54px; height: 54px; border: 1px solid rgba(255, 255, 255, 0.6); background: rgba(22, 21, 43, 0.3); color: #fff; cursor: pointer; display: grid; place-items: center; transition: background-color 200ms ease, color 200ms ease, transform 160ms var(--ease-out); }
       .arrow svg, .lbnav svg { width: 22px; height: 22px; }
 
       /* Edifício */
       .amen { list-style: none; margin-top: 28px; display: grid; gap: 4px; }
       .amen li { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--line); }
-      .amen svg { width: 20px; height: 20px; color: var(--gold); flex: none; margin-top: 4px; }
+      .amen svg { width: 20px; height: 20px; color: var(--gold-ink); flex: none; margin-top: 4px; }
 
       /* Apartamentos */
       .apartments { background: var(--paper); }
       .tabs { display: flex; gap: 0; box-shadow: inset 0 -1px 0 var(--line); margin-bottom: 40px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
       .tabs::-webkit-scrollbar { display: none; }
-      .tab { font: 14px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; padding: 18px 28px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; white-space: nowrap; }
+      .tab { font: 14px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; padding: 18px 28px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color 200ms ease, transform 160ms var(--ease-out); }
       .tab[aria-selected="true"] { color: var(--navy); border-bottom-color: var(--gold); }
       .panel { display: none; grid-template-columns: 1.15fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-      .panel.on { display: grid; animation: fade 0.4s ease; }
-      @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      .panel.on { display: grid; animation: fade 200ms var(--ease-out); }
+      @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
       .pphoto { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
-      .plabel { font-size: 12.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #8a87a3; margin: 26px 0 12px; }
+      .plabel { font-size: 12.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 26px 0 12px; }
       .plans { display: flex; flex-wrap: wrap; gap: 12px; }
-      .plan { flex: 0 1 140px; background: #fff; border: 1px solid var(--line); padding: 8px; cursor: zoom-in; text-align: center; font: 11.5px/1.3 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .plan { flex: 0 1 140px; background: #fff; border: 1px solid var(--line); padding: 8px; cursor: zoom-in; text-align: center; font: 11.5px/1.3 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: border-color 200ms ease, transform 160ms var(--ease-out); }
       .plan img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 8px; }
-      .plan:hover { border-color: var(--gold); }
-      .ptype { display: block; font-size: 12.5px; letter-spacing: 0.24em; text-transform: uppercase; color: #8a87a3; margin-bottom: 12px; }
+      .ptype { display: block; font-size: 12.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
       .pinfo h3 { font-size: clamp(30px, 3vw, 40px); margin-bottom: 16px; }
       .price { font: 400 40px/1.1 var(--serif); margin-bottom: 26px; }
       .price small { font: 15px var(--sans); color: var(--muted); }
@@ -400,9 +401,8 @@
 
       /* Galeria */
       .grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; grid-auto-flow: dense; gap: 10px; }
-      .gi { border: 0; padding: 0; background: var(--line); cursor: zoom-in; overflow: hidden; }
-      .gi img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-      .gi:hover img { transform: scale(1.04); }
+      .gi { border: 0; padding: 0; background: var(--line); cursor: zoom-in; overflow: hidden; transition: transform 160ms var(--ease-out); }
+      .gi img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms var(--ease-out); }
       .gi:nth-child(1) { grid-column: span 2; grid-row: span 2; }
       .gi:nth-child(7) { grid-row: span 2; }
       .gi:nth-child(8) { grid-column: span 2; }
@@ -410,7 +410,6 @@
 
       /* Contacto */
       .contact { background: var(--navy); color: #fff; }
-      .contact .kicker { color: var(--gold); }
       .contact h2 { color: #fff; }
       .contact .txt p { color: var(--cream); }
       .ct { align-items: start; }
@@ -437,7 +436,10 @@
 
       /* Lightbox */
       .lightbox { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; }
-      .lightbox::backdrop { background: rgba(14, 13, 28, 0.94); }
+      .lightbox::backdrop { background: rgba(14, 13, 28, 0.94); transition: opacity 200ms ease; }
+      .lightbox[open]::backdrop { @starting-style { opacity: 0; } }
+      .lightbox figure { transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out); }
+      .lightbox[open] figure { @starting-style { opacity: 0; transform: scale(0.97); } }
       .lightbox[open] { display: grid; grid-template-columns: 70px 1fr 70px; align-items: center; }
       .lightbox figure { display: grid; justify-items: center; gap: 14px; }
       .lightbox img { max-width: 100%; max-height: 84vh; object-fit: contain; background: #fff; }
@@ -446,14 +448,14 @@
       .lbclose { position: fixed; top: 16px; right: 20px; background: none; border: 0; color: #fff; font-size: 42px; line-height: 1; cursor: pointer; }
 
       /* Animação ao aparecer */
-      .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.8s ease, transform 0.8s ease; }
-      .reveal.in { opacity: 1; transform: none; }
-      @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+      /* Só esconde o conteúdo para animar quando o JavaScript está ativo (classe .js no <html>) */
+      .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+      .js .reveal.in { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) { .js .reveal { transform: none; transition: opacity 300ms ease; } html { scroll-behavior: auto; } .gi img, .btn, .tab, .plan, .arrow, .lbnav, .gi { transition: none; } }
 
       /* Rodapé */
       .sitefoot { background: #100f20; color: var(--cream); padding: 72px 0 32px; font-size: 15px; text-align: center; }
-      .sitefoot a { color: var(--cream); text-decoration: none; transition: color 0.2s; }
-      .sitefoot a:hover { color: var(--gold); }
+      .sitefoot a { color: var(--cream); text-decoration: none; transition: color 200ms ease; }
       .sitefoot .wrap { display: flex; flex-direction: column; align-items: center; }
       .sf-logo { display: inline-block; line-height: 0; margin-bottom: 28px; }
       .sf-logo img { height: 34px; width: auto; }
@@ -470,7 +472,6 @@
         .topright { margin-left: auto; position: relative; z-index: 2; }
         .burger { display: block; }
         .topright .btn-sm { display: none; }
-        .statsin { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
         .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
         .gi:nth-child(n) { grid-column: auto; grid-row: auto; }
         .gi:nth-child(1), .gi:nth-child(8) { grid-column: span 2; grid-row: span 2; }
@@ -488,6 +489,19 @@
         .tab { padding: 16px 14px; font-size: 12px; letter-spacing: 0.12em; }
         .poi li { grid-template-columns: 36px 1fr; }
         .poi .d { grid-column: 2; text-align: left; }
+      }
+
+      /* Efeitos de hover só em aparelhos com rato (no telemóvel ficavam "presos" depois do toque) */
+      @media (hover: hover) and (pointer: fine) {
+        .btn:hover { background: #ecc98a; }
+        .btn-line:hover { background: #fff; color: var(--navy); }
+        .mainnav a:hover { opacity: 1; color: var(--gold); }
+        .lang:hover { border-color: var(--gold); color: var(--gold); }
+        .arrow:hover, .lbnav:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+        .tab:hover { color: var(--navy); }
+        .plan:hover { border-color: var(--gold); }
+        .gi:hover img { transform: scale(1.04); }
+        .sitefoot a:hover { color: var(--gold); }
       }
 
     </style>
@@ -533,7 +547,6 @@
       <section class="sec concept" id="concept">
         <div class="wrap grid2">
           <div class="txt reveal">
-            <span class="kicker">01 — O conceito</span>
             <h2>Casas preparadas para uma nova etapa.</h2>
             <p>O Jardins do Marquês fica numa zona central do Porto, onde a vida de bairro se cruza com o comércio, os transportes e os serviços do dia a dia.</p><p>Viver aqui significa acompanhar o ritmo da cidade sem abdicar de um espaço reservado para descansar. Do estúdio ao duplex, há uma casa para cada fase da vida.</p>
             <p class="quote">Edifício novo, arrendamento de longa duração.</p>
@@ -542,15 +555,10 @@
         </div>
       </section>
 
-      <section class="stats" aria-label="Jardins do Marquês">
-        <div class="wrap statsin"><div class="stat"><b><span class="count" data-to="170">170</span> m</b><span>do metro do Marquês</span></div><div class="stat"><b><span class="count" data-to="3">3</span></b><span>tipologias: T0, T1 e T2</span></div><div class="stat"><b><span class="count" data-to="900">900</span> €</b><span>renda mensal desde</span></div><div class="stat"><b><span class="count" data-to="100">100</span>%</b><span>com varanda e garagem</span></div></div>
-      </section>
-
       <section class="sec location" id="location">
         <div class="wrap grid2 loc">
           <figure class="imgwide reveal"><img style="object-position: 72% 50%" src="assets/img/v2/aerea-marques.webp" alt="Vista aérea da Praça do Marquês e do Jardins do Marquês" loading="lazy" width="1920" height="1080"></figure>
           <div class="txt reveal">
-            <span class="kicker">02 — Localização</span>
             <h2>No centro de tudo, num bairro tranquilo.</h2>
             <p>A Rua do Bonjardim liga o Marquês à Baixa. O metro, os autocarros, o comércio e os serviços estão a poucos minutos a pé.</p>
             <ol class="poi"><li><span class="n">01</span><span class="p">Metro do Marquês</span><span class="d">170 m</span></li><li><span class="n">02</span><span class="p">Paragens de autocarro</span><span class="d">180 m</span></li><li><span class="n">03</span><span class="p">Supermercado</span><span class="d">220 m</span></li><li><span class="n">04</span><span class="p">Escola</span><span class="d">300 m</span></li><li><span class="n">05</span><span class="p">Praça da República</span><span class="d">800 m</span></li><li><span class="n">06</span><span class="p">Metro da Trindade</span><span class="d">1 km</span></li><li><span class="n">07</span><span class="p">Rua de Santa Catarina e Baixa</span><span class="d">poucos minutos</span></li><li><span class="n">08</span><span class="p">Polo universitário</span><span class="d">acesso direto de metro</span></li></ol>
@@ -575,7 +583,6 @@
       <section class="sec building" id="features">
         <div class="wrap grid2">
           <div class="txt reveal">
-            <span class="kicker">03 — O edifício</span>
             <h2>Uma arquitetura feita para durar.</h2>
             <p>Galerias abertas, muita luz natural e materiais escolhidos para o dia a dia. Um edifício novo, eficiente e pensado para quem quer viver no centro com conforto.</p>
             <ul class="amen"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Varanda privativa em todas as frações</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Lugar de garagem incluído</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Painéis fotovoltaicos e bomba de calor</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Ar condicionado</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Isolamento térmico e acústico</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Janelas de alumínio com corte térmico e vidro duplo</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Elevador</span></li></ul>
@@ -587,12 +594,11 @@
       <section class="sec apartments" id="apartments">
         <div class="wrap">
           <div class="head reveal">
-            <span class="kicker">04 — Apartamentos</span>
             <h2>Escolha a sua casa.</h2>
             <p class="note">Arrendamento de longa duração.</p>
           </div>
           <div id="prices">
-            <div class="tabs" role="tablist"><button type="button" class="tab" role="tab" id="tab-T0" aria-controls="pn-T0" aria-selected="true" data-t="T0">T0 · Estúdio</button><button type="button" class="tab" role="tab" id="tab-T1" aria-controls="pn-T1" aria-selected="false" data-t="T1">T1 · Duplex</button><button type="button" class="tab" role="tab" id="tab-T2" aria-controls="pn-T2" aria-selected="false" data-t="T2">T2 · Duplex</button></div>
+            <div class="tabs" role="tablist"><button type="button" class="tab" role="tab" id="tab-T0" aria-controls="pn-T0" aria-selected="true" tabindex="0" data-t="T0">T0 · Estúdio</button><button type="button" class="tab" role="tab" id="tab-T1" aria-controls="pn-T1" aria-selected="false" tabindex="-1" data-t="T1">T1 · Duplex</button><button type="button" class="tab" role="tab" id="tab-T2" aria-controls="pn-T2" aria-selected="false" tabindex="-1" data-t="T2">T2 · Duplex</button></div>
             
           <div class="panel on" id="pn-T0" role="tabpanel" aria-labelledby="tab-T0">
             <div class="pmedia">
@@ -643,7 +649,6 @@
       <section class="sec gallery" id="gallery">
         <div class="wrap">
           <div class="head reveal">
-            <span class="kicker">05 — Galeria</span>
             <h2>Por dentro e por fora.</h2>
           </div>
           <div class="grid"><button type="button" class="gi" data-full="assets/img/v2/fachada-render.webp" data-cap="Fachada"><img src="assets/img/v2/fachada-render-sm.webp" alt="Fachada" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/sala.webp" data-cap="Sala de estar"><img src="assets/img/v2/sala-sm.webp" alt="Sala de estar" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/quarto.webp" data-cap="Quarto"><img src="assets/img/v2/quarto-sm.webp" alt="Quarto" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/varanda-estudio.webp" data-cap="Varanda e estúdio"><img src="assets/img/v2/varanda-estudio-sm.webp" alt="Varanda e estúdio" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/cozinha.webp" data-cap="Cozinha"><img src="assets/img/v2/cozinha-sm.webp" alt="Cozinha" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/casa-de-banho.webp" data-cap="Casa de banho"><img src="assets/img/v2/casa-de-banho-sm.webp" alt="Casa de banho" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/duche.webp" data-cap="Duche"><img src="assets/img/v2/duche-sm.webp" alt="Duche" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/sala-render.webp" data-cap="Sala"><img src="assets/img/v2/sala-render-sm.webp" alt="Sala" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/varanda-render.webp" data-cap="Galeria exterior"><img src="assets/img/v2/varanda-render-sm.webp" alt="Galeria exterior" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/rua-interior.webp" data-cap="Rua interior"><img src="assets/img/v2/rua-interior-sm.webp" alt="Rua interior" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/fachada.webp" data-cap="Fachada"><img src="assets/img/v2/fachada-sm.webp" alt="Fachada" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/rua-acesso.webp" data-cap="Acesso ao edifício"><img src="assets/img/v2/rua-acesso-sm.webp" alt="Acesso ao edifício" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/aerea-igreja.webp" data-cap="Vista aérea"><img src="assets/img/v2/aerea-igreja-sm.webp" alt="Vista aérea" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/aerea-bairro.webp" data-cap="O bairro"><img src="assets/img/v2/aerea-bairro-sm.webp" alt="O bairro" loading="lazy"></button></div>
@@ -653,7 +658,6 @@
       <section class="sec contact" id="contact">
         <div class="wrap grid2 ct" id="form">
           <div class="txt">
-            <span class="kicker">06 — Contacto</span>
             <h2>Fale connosco.</h2>
             <p>Diga-nos o que procura. Respondemos o mais rapidamente possível.</p>
             <ol class="steps"><li><b>1</b>Envie o seu pedido</li><li><b>2</b>A nossa equipa contacta-o</li><li><b>3</b>Visite o apartamento</li></ol>
@@ -714,6 +718,8 @@
 
     <script src="assets/vendor/intl-tel-input/js/intlTelInputWithUtils.min.js"></script>
     <script>
+      window.__lpReady = true; // o conteúdo só fica escondido para animar se este script correr
+
       // ---- Cabeçalho: fica sólido ao fazer scroll; menu no telemóvel
       var topbar = document.getElementById("top");
       function onScroll() { topbar.classList.toggle("solid", window.scrollY > 40); }
@@ -733,30 +739,17 @@
         });
       });
 
-      // ---- Animação ao aparecer + números a contar
+      // ---- Animação ao aparecer
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      function countUp(el) {
-        var to = parseInt(el.getAttribute("data-to"), 10), t0 = null, dur = 1400;
-        if (reduce) { el.textContent = to; return; }
-        function step(ts) {
-          if (!t0) t0 = ts;
-          var p = Math.min((ts - t0) / dur, 1);
-          el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-          if (p < 1) requestAnimationFrame(step);
-        }
-        el.textContent = "0";
-        requestAnimationFrame(step);
-      }
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) {
             if (!en.isIntersecting) return;
-            if (en.target.classList.contains("count")) countUp(en.target);
-            else en.target.classList.add("in");
+            en.target.classList.add("in");
             io.unobserve(en.target);
           });
         }, { threshold: 0.15 });
-        document.querySelectorAll(".reveal, .count").forEach(function (el) { io.observe(el); });
+        document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
       } else {
         document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
       }
@@ -777,12 +770,23 @@
       // ---- Separadores das tipologias
       function showType(code) {
         document.querySelectorAll(".tab").forEach(function (x) {
-          x.setAttribute("aria-selected", x.getAttribute("data-t") === code ? "true" : "false");
+          var on = x.getAttribute("data-t") === code;
+          x.setAttribute("aria-selected", on ? "true" : "false");
+          x.tabIndex = on ? 0 : -1;
         });
         document.querySelectorAll(".panel").forEach(function (p) { p.classList.toggle("on", p.id === "pn-" + code); });
       }
-      document.querySelectorAll(".tab").forEach(function (b) {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+      tabs.forEach(function (b, i) {
         b.addEventListener("click", function () { showType(b.getAttribute("data-t")); });
+        b.addEventListener("keydown", function (ev) {
+          var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[ev.key];
+          if (k === undefined) return;
+          ev.preventDefault();
+          var nb = tabs[(k + tabs.length) % tabs.length];
+          showType(nb.getAttribute("data-t"));
+          nb.focus();
+        });
       });
 
       // ---- Galeria e plantas em ecrã inteiro
@@ -877,6 +881,8 @@
           return;
         }
         btn.disabled = true;
+        var btnLabel = btn.textContent;
+        btn.textContent = "A enviar…";
         var data = new URLSearchParams(new FormData(form));
         data.set("phone", iti.getNumber()); // número completo com indicativo, ex: +351912345678
         fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: data.toString() })
@@ -886,6 +892,7 @@
           })
           .catch(function () {
             btn.disabled = false;
+            btn.textContent = btnLabel;
             alert("Ocorreu um erro. Tente novamente ou contacte-nos.");
           });
       });

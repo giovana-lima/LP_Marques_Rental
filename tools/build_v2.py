@@ -32,7 +32,7 @@ IMG = 'assets/img/v2/'
 T = {
  'pt': dict(
   lang='pt-PT', other_url='https://rent-marques.youropapt.com/', other_label='EN', other_hreflang='en', other_name='English',
-  thanks='obrigado-pt.html', origin='LP Marques Rental PT',
+  thanks='obrigado-pt.html', origin='LP Marques Rental PT', gal_label='Galeria', sending='A enviar…',
   nav=[('concept', 'O conceito'), ('location', 'Localização'), ('apartments', 'Apartamentos'), ('gallery', 'Galeria')],
   cta='Pedir informações', menu='Menu', close='Fechar',
   hero_eyebrow='Jardins do Marquês · Rua do Bonjardim, Porto',
@@ -45,7 +45,6 @@ T = {
              'Viver aqui significa acompanhar o ritmo da cidade sem abdicar de um espaço reservado para descansar. Do estúdio ao duplex, há uma casa para cada fase da vida.'],
   concept_quote='Edifício novo, arrendamento de longa duração.',
   concept_alt='Sala de estar de um apartamento no Jardins do Marquês',
-  stats=[('170', ' m', 'do metro do Marquês'), ('3', '', 'tipologias: T0, T1 e T2'), ('900', ' €', 'renda mensal desde'), ('100', '%', 'com varanda e garagem')],
   loc_k='02 — Localização', loc_h='No centro de tudo, num bairro tranquilo.',
   loc_p='A Rua do Bonjardim liga o Marquês à Baixa. O metro, os autocarros, o comércio e os serviços estão a poucos minutos a pé.',
   loc_list=[('Metro do Marquês', '170 m'), ('Paragens de autocarro', '180 m'), ('Supermercado', '220 m'), ('Escola', '300 m'),
@@ -96,7 +95,7 @@ T = {
  ),
  'en': dict(
   lang='en', other_url='https://arrendar-marques.youropapt.com/', other_label='PT', other_hreflang='pt', other_name='Português',
-  thanks='thank-you-en.html', origin='LP Marques Rental EN',
+  thanks='thank-you-en.html', origin='LP Marques Rental EN', gal_label='Gallery', sending='Sending…',
   nav=[('concept', 'The concept'), ('location', 'Location'), ('apartments', 'Apartments'), ('gallery', 'Gallery')],
   cta='Request details', menu='Menu', close='Close',
   hero_eyebrow='Jardins do Marquês · Rua do Bonjardim, Porto',
@@ -109,7 +108,6 @@ T = {
              'Living here means keeping up with the city while having a calm place to rest. From studio to duplex, there is a home for every stage of life.'],
   concept_quote='Brand-new building, long-term rental.',
   concept_alt='Living room of an apartment at Jardins do Marquês',
-  stats=[('170', ' m', 'from Marquês metro'), ('3', '', 'types: T0, T1 and T2'), ('900', ' €', 'monthly rent from'), ('100', '%', 'with balcony and parking')],
   loc_k='02 — Location', loc_h='Close to everything, in a quiet neighbourhood.',
   loc_p='Rua do Bonjardim links Marquês to the city centre. Metro, buses, shops and services are a few minutes away on foot.',
   loc_list=[('Marquês metro', '170 m'), ('Bus stops', '180 m'), ('Supermarket', '220 m'), ('School', '300 m'),
@@ -176,11 +174,10 @@ def build(lang):
     t = T[lang]
     head_top, seo, gtm_ns, footer, title, desc = old_parts(lang)
     nav = ''.join(f'<a href="#{i}">{e(l)}</a>' for i, l in t['nav'])
-    stats = ''.join(f'<div class="stat"><b><span class="count" data-to="{n}">{n}</span>{e(u)}</b><span>{e(l)}</span></div>' for n, u, l in t['stats'])
     loc = ''.join(f'<li><span class="n">{k+1:02d}</span><span class="p">{e(a)}</span><span class="d">{e(b)}</span></li>' for k, (a, b) in enumerate(t['loc_list']))
     slides = ''.join(f'<figure class="slide"><img src="{IMG}{f}.webp" alt="{e(c)}" loading="lazy" width="1920" height="1280"><figcaption><span>{k+1}/{len(t["slides"])}</span>{e(c)}</figcaption></figure>' for k, (f, c) in enumerate(t['slides']))
     amen = ''.join(f'<li>{ICON_CHECK}<span>{e(a)}</span></li>' for a in t['amen'])
-    tabs = ''.join(f'<button type="button" class="tab" role="tab" id="tab-{a["code"]}" aria-controls="pn-{a["code"]}" aria-selected="{"true" if k == 0 else "false"}" data-t="{a["code"]}">{e(a["tab"])}</button>' for k, a in enumerate(t['apts']))
+    tabs = ''.join(f'<button type="button" class="tab" role="tab" id="tab-{a["code"]}" aria-controls="pn-{a["code"]}" aria-selected="{"true" if k == 0 else "false"}" tabindex="{0 if k == 0 else -1}" data-t="{a["code"]}">{e(a["tab"])}</button>' for k, a in enumerate(t['apts']))
     panels = ''
     for k, a in enumerate(t['apts']):
         rows = ''.join(f'<div><dt>{e(x)}</dt><dd>{e(y)}</dd></div>' for x, y in a['rows'] + t['rows_common'])
@@ -204,7 +201,7 @@ def build(lang):
     steps = ''.join(f'<li><b>{k+1}</b>{e(s)}</li>' for k, s in enumerate(t['steps']))
     opt = lambda pairs: ''.join(f'<option value="{e(v)}">{e(l)}</option>' for v, l in pairs)
     js = (JS.replace('__THANKS__', t['thanks']).replace('__UI__', t['ui']).replace('__PHONE_MSG__', t['phone_msg'])
-            .replace('__EMAIL_MSG__', t['email_msg']).replace('__ERR__', t['err']).replace('__LANG__', 'pt' if lang == 'pt' else 'en'))
+            .replace('__EMAIL_MSG__', t['email_msg']).replace('__ERR__', t['err']).replace('__LANG__', 'pt' if lang == 'pt' else 'en').replace('__SENDING__', t['sending']))
 
     return f'''<!doctype html>
 <html lang="{t['lang']}">
@@ -216,7 +213,12 @@ def build(lang):
     <link rel="preload" as="image" href="{IMG}fachada-render.webp" media="(min-width: 801px)" />
     <link rel="preload" as="image" href="{IMG}fachada-render-sm.webp" media="(max-width: 800px)" />
     <link rel="stylesheet" href="assets/vendor/intl-tel-input/css/intlTelInput.min.css" />
-{seo}    <style>
+{seo}    <meta name="theme-color" content="#16152b" />
+    <script>
+      document.documentElement.classList.add("js");
+      setTimeout(function () {{ if (!window.__lpReady) document.documentElement.classList.remove("js"); }}, 3000);
+    </script>
+    <style>
 {CSS}
     </style>
   </head>
@@ -251,7 +253,6 @@ def build(lang):
       <section class="sec concept" id="concept">
         <div class="wrap grid2">
           <div class="txt reveal">
-            <span class="kicker">{e(t['concept_k'])}</span>
             <h2>{e(t['concept_h'])}</h2>
             {''.join(f'<p>{e(p)}</p>' for p in t['concept_p'])}
             <p class="quote">{e(t['concept_quote'])}</p>
@@ -260,15 +261,10 @@ def build(lang):
         </div>
       </section>
 
-      <section class="stats" aria-label="Jardins do Marquês">
-        <div class="wrap statsin">{stats}</div>
-      </section>
-
       <section class="sec location" id="location">
         <div class="wrap grid2 loc">
           <figure class="imgwide reveal"><img style="object-position: 72% 50%" src="{IMG}aerea-marques.webp" alt="{e(t['loc_alt'])}" loading="lazy" width="1920" height="1080"></figure>
           <div class="txt reveal">
-            <span class="kicker">{e(t['loc_k'])}</span>
             <h2>{e(t['loc_h'])}</h2>
             <p>{e(t['loc_p'])}</p>
             <ol class="poi">{loc}</ol>
@@ -293,7 +289,6 @@ def build(lang):
       <section class="sec building" id="features">
         <div class="wrap grid2">
           <div class="txt reveal">
-            <span class="kicker">{e(t['bld_k'])}</span>
             <h2>{e(t['bld_h'])}</h2>
             <p>{e(t['bld_p'])}</p>
             <ul class="amen">{amen}</ul>
@@ -305,7 +300,6 @@ def build(lang):
       <section class="sec apartments" id="apartments">
         <div class="wrap">
           <div class="head reveal">
-            <span class="kicker">{e(t['apt_k'])}</span>
             <h2>{e(t['apt_h'])}</h2>
             <p class="note">{e(t['apt_note'])}</p>
           </div>
@@ -319,7 +313,6 @@ def build(lang):
       <section class="sec gallery" id="gallery">
         <div class="wrap">
           <div class="head reveal">
-            <span class="kicker">{e(t['gal_k'])}</span>
             <h2>{e(t['gal_h'])}</h2>
           </div>
           <div class="grid">{gal}</div>
@@ -329,7 +322,6 @@ def build(lang):
       <section class="sec contact" id="contact">
         <div class="wrap grid2 ct" id="form">
           <div class="txt">
-            <span class="kicker">{e(t['contact_k'])}</span>
             <h2>{e(t['contact_h'])}</h2>
             <p>{e(t['contact_p'])}</p>
             <ol class="steps">{steps}</ol>
@@ -366,7 +358,7 @@ def build(lang):
     </main>
 
 {footer}
-    <dialog class="lightbox" id="lightbox" aria-label="Galeria">
+    <dialog class="lightbox" id="lightbox" aria-label="{e(t['gal_label'])}">
       <button type="button" class="lbclose" aria-label="{e(t['close'])}">×</button>
       <button type="button" class="lbnav" data-dir="-1" aria-label="{e(t['prev'])}">{ICON_L}</button>
       <figure><img alt=""><figcaption></figcaption></figure>
