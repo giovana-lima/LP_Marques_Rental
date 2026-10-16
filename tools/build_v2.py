@@ -60,7 +60,7 @@ T = {
         'Isolamento térmico e acústico', 'Janelas de alumínio com corte térmico e vidro duplo', 'Elevador'],
   bld_alt='Fachada do Jardins do Marquês com galerias e varandas',
   apt_k='04 — Apartamentos', apt_h='Escolha a sua casa.',
-  apt_note='Arrendamento de longa duração. Apartamentos entregues sem mobília.',
+  apt_note='Arrendamento de longa duração.',
   from_='Desde', month='/mês', plans='Plantas',
   rows_common=[('Estacionamento', '1 lugar incluído'), ('Cozinha', 'Forno, placa, exaustor, combinado, máquina de lavar loiça e roupa embutidos'),
                ('Materiais', 'Pavimento flutuante em carvalho, armários lacados, bancadas em granito cinzento'),
@@ -76,10 +76,10 @@ T = {
         rows=[('Área bruta', 'A: 78,81 m² · B: 83,65 m²'), ('Varandas', 'A: 40,88 m² · B: 16,69 m²'), ('Layout', 'Duplex · pisos 3–4 · duas opções (A e B)')],
         plans=[('planta-t1-piso1', 'Opção A · Piso 1'), ('planta-t2a-piso2', 'Opção A · Piso 2'), ('planta-t2b-piso1', 'Opção B · Piso 1'), ('planta-t2b-piso2', 'Opção B · Piso 2')]),
   ],
-  gal_k='05 — Galeria', gal_h='Por dentro e por fora.', gal_note='Imagens ilustrativas. Os apartamentos são entregues sem mobília.',
-  gallery=[('fachada-render', 'Fachada (imagem 3D)'), ('sala', 'Sala de estar'), ('quarto', 'Quarto'), ('varanda-estudio', 'Varanda e estúdio'),
-           ('cozinha', 'Cozinha'), ('casa-de-banho', 'Casa de banho'), ('duche', 'Duche'), ('sala-render', 'Sala (imagem 3D)'),
-           ('varanda-render', 'Galeria exterior (imagem 3D)'), ('rua-interior', 'Rua interior'), ('fachada', 'Fachada'), ('rua-acesso', 'Acesso ao edifício'),
+  gal_k='05 — Galeria', gal_h='Por dentro e por fora.', gal_note='',
+  gallery=[('fachada-render', 'Fachada'), ('sala', 'Sala de estar'), ('quarto', 'Quarto'), ('varanda-estudio', 'Varanda e estúdio'),
+           ('cozinha', 'Cozinha'), ('casa-de-banho', 'Casa de banho'), ('duche', 'Duche'), ('sala-render', 'Sala'),
+           ('varanda-render', 'Galeria exterior'), ('rua-interior', 'Rua interior'), ('fachada', 'Fachada'), ('rua-acesso', 'Acesso ao edifício'),
            ('aerea-igreja', 'Vista aérea'), ('aerea-bairro', 'O bairro')],
   contact_k='06 — Contacto', contact_h='Fale connosco.', contact_p='Diga-nos o que procura. Respondemos o mais rapidamente possível.',
   steps=['Envie o seu pedido', 'A nossa equipa contacta-o', 'Visite o apartamento'],
@@ -124,7 +124,7 @@ T = {
         'Thermal and acoustic insulation', 'Double-glazed aluminium windows with thermal break', 'Lift'],
   bld_alt='Facade of Jardins do Marquês with galleries and balconies',
   apt_k='04 — Apartments', apt_h='Pick your home.',
-  apt_note='Long-term rental. Apartments are delivered unfurnished.',
+  apt_note='Long-term rental.',
   from_='From', month='/month', plans='Floor plans',
   rows_common=[('Parking', '1 space included'), ('Kitchen', 'Built-in oven, hob, extractor, fridge-freezer, dishwasher, washer'),
                ('Materials', 'Oak floating floors, lacquered cabinetry, grey granite worktops'),
@@ -140,10 +140,10 @@ T = {
         rows=[('Gross area', 'A: 78.81 m² · B: 83.65 m²'), ('Balconies', 'A: 40.88 m² · B: 16.69 m²'), ('Layout', 'Duplex · floors 3–4 · two layouts (A and B)')],
         plans=[('planta-t1-piso1', 'Layout A · Level 1'), ('planta-t2a-piso2', 'Layout A · Level 2'), ('planta-t2b-piso1', 'Layout B · Level 1'), ('planta-t2b-piso2', 'Layout B · Level 2')]),
   ],
-  gal_k='05 — Gallery', gal_h='Inside and out.', gal_note='Images are illustrative. Apartments are delivered unfurnished.',
-  gallery=[('fachada-render', 'Facade (3D image)'), ('sala', 'Living room'), ('quarto', 'Bedroom'), ('varanda-estudio', 'Balcony and studio'),
-           ('cozinha', 'Kitchen'), ('casa-de-banho', 'Bathroom'), ('duche', 'Shower'), ('sala-render', 'Living room (3D image)'),
-           ('varanda-render', 'Outdoor gallery (3D image)'), ('rua-interior', 'Inner street'), ('fachada', 'Facade'), ('rua-acesso', 'Building access'),
+  gal_k='05 — Gallery', gal_h='Inside and out.', gal_note='',
+  gallery=[('fachada-render', 'Facade'), ('sala', 'Living room'), ('quarto', 'Bedroom'), ('varanda-estudio', 'Balcony and studio'),
+           ('cozinha', 'Kitchen'), ('casa-de-banho', 'Bathroom'), ('duche', 'Shower'), ('sala-render', 'Living room'),
+           ('varanda-render', 'Outdoor gallery'), ('rua-interior', 'Inner street'), ('fachada', 'Facade'), ('rua-acesso', 'Building access'),
            ('aerea-igreja', 'Aerial view'), ('aerea-bairro', 'The neighbourhood')],
   contact_k='06 — Contact', contact_h='Talk to us.', contact_p="Tell us what you're looking for. We'll reply as soon as possible.",
   steps=['Send us your request', 'Our team contacts you', 'Visit the apartment'],
@@ -323,8 +323,7 @@ def build(lang):
             <h2>{e(t['gal_h'])}</h2>
           </div>
           <div class="grid">{gal}</div>
-          <p class="note small">{e(t['gal_note'])}</p>
-        </div>
+{f'          <p class="note small">{e(t["gal_note"])}</p>' + chr(10) if t['gal_note'] else ''}        </div>
       </section>
 
       <section class="sec contact" id="contact">
