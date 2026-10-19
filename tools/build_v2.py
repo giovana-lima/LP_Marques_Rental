@@ -50,7 +50,8 @@ T = {
   loc_p='A Rua do Bonjardim liga o Marquês à Baixa. O metro, os autocarros, o comércio e os serviços estão a poucos minutos a pé.',
   loc_list=[('Metro do Marquês', '170 m'), ('Paragens de autocarro', '180 m'), ('Supermercado', '220 m'), ('Escola', '300 m'),
             ('Praça da República', '800 m'), ('Metro da Trindade', '1 km'), ('Rua de Santa Catarina e Baixa', 'poucos minutos'), ('Polo universitário', 'acesso direto de metro')],
-  loc_alt='Vista aérea da Praça do Marquês e do Jardins do Marquês', map_title='Mapa', maps='Abrir no Google Maps',
+  loc_alt='Vista aérea da Praça do Marquês e do Jardins do Marquês',
+  zona=['Vista aérea da zona do Jardins do Marquês, no Porto', 'Vista aérea com o Jardins do Marquês assinalado', 'Vista aérea com a Praça e o metro do Marquês assinalados'], zona_dot='Imagem', map_title='Mapa', maps='Abrir no Google Maps',
   slides=[('varanda-render', 'Varandas privativas em todos os apartamentos'), ('cozinha', 'Cozinhas equipadas com bancada em granito'),
           ('garagem', 'Lugar de garagem incluído'), ('cobertura', 'Painéis fotovoltaicos na cobertura')],
   prev='Anterior', next='Seguinte',
@@ -114,7 +115,8 @@ T = {
   loc_p='Rua do Bonjardim links Marquês to the city centre. Metro, buses, shops and services are a few minutes away on foot.',
   loc_list=[('Marquês metro', '170 m'), ('Bus stops', '180 m'), ('Supermarket', '220 m'), ('School', '300 m'),
             ('Praça da República', '800 m'), ('Trindade metro', '1 km'), ('Rua de Santa Catarina and Baixa', 'a few minutes'), ('University area', 'direct by metro')],
-  loc_alt='Aerial view of Praça do Marquês and Jardins do Marquês', map_title='Map', maps='Open in Google Maps',
+  loc_alt='Aerial view of Praça do Marquês and Jardins do Marquês',
+  zona=['Aerial view of the Jardins do Marquês area in Porto', 'Aerial view with Jardins do Marquês highlighted', 'Aerial view with Praça do Marquês and the metro highlighted'], zona_dot='Image', map_title='Map', maps='Open in Google Maps',
   slides=[('varanda-render', 'Private balconies in every apartment'), ('cozinha', 'Fitted kitchens with granite worktops'),
           ('garagem', 'Parking space included'), ('cobertura', 'Solar panels on the roof')],
   prev='Previous', next='Next',
@@ -206,6 +208,12 @@ def build(lang):
               <a class="btn" href="#contact" data-pick="{a['code']}">{e(t['cta'])}</a>
             </div>
           </div>'''
+    zona_imgs, zona_dots = '', ''
+    for n, a in enumerate(t['zona'], 1):
+        on, hid = (' on', '') if n == 2 else ('', ' aria-hidden="true"')
+        zona_imgs += f'<img class="zf{on}" src="{IMG}zona-{n}.webp" srcset="{IMG}zona-{n}-sm.webp 640w, {IMG}zona-{n}.webp 1080w" sizes="(max-width: 800px) 100vw, 45vw" alt="{e(a)}"{hid} loading="lazy" width="1080" height="1920">'
+        cur = ' aria-current="true"' if n == 2 else ''
+        zona_dots += f'<button type="button" class="zdot" data-z="{n - 1}" aria-label="{e(t["zona_dot"])} {n}/3"{cur}><span></span></button>'
     stats = ''.join(f'<li class="stat"><p class="num"><span class="count" data-to="{n}">{n}</span>{f"<small>{e(u)}</small>" if u else ""}</p><p class="lbl">{e(l)}</p></li>' for n, u, l in t['stats'])
     gal = ''.join(f'<button type="button" class="gi" data-full="{IMG}{f}.webp" data-cap="{e(c)}"><img src="{IMG}{f}-sm.webp" alt="{e(c)}" loading="lazy"></button>' for f, c in t['gallery'])
     steps = ''.join(f'<li><b>{k+1}</b>{e(s)}</li>' for k, s in enumerate(t['steps']))
@@ -277,7 +285,7 @@ def build(lang):
 
       <section class="sec location" id="location">
         <div class="wrap grid2 loc">
-          <figure class="imgwide reveal"><img style="object-position: 72% 50%" src="{IMG}aerea-marques.webp" alt="{e(t['loc_alt'])}" loading="lazy" width="1920" height="1080"></figure>
+          <figure class="zona reveal" id="zona">{zona_imgs}<div class="zdots">{zona_dots}</div></figure>
           <div class="txt reveal">
             <h2>{e(t['loc_h'])}</h2>
             <p>{e(t['loc_p'])}</p>
