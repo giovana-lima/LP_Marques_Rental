@@ -70,7 +70,7 @@
 
       /* Números */
       .stats { background: var(--navy); color: #fff; }
-      .statsin { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); }
+      .statsin { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); }
       .stat { padding: clamp(44px, 6vw, 72px) clamp(16px, 2.4vw, 32px); text-align: center; }
       .stat + .stat { box-shadow: inset 1px 0 0 var(--line-d); }
       .num { font: 400 clamp(42px, 4.6vw, 60px)/1 var(--serif); color: var(--gold); font-variant-numeric: lining-nums tabular-nums; margin-bottom: 14px; }
@@ -203,12 +203,14 @@
         .topright { margin-left: auto; position: relative; z-index: 2; }
         .burger { display: block; }
         .topright .btn-sm { display: none; }
-        .statsin { grid-template-columns: repeat(2, 1fr); }
-        .stat:nth-child(3) { box-shadow: inset 0 1px 0 var(--line-d); }
-        .stat:nth-child(4) { box-shadow: inset 1px 0 0 var(--line-d), inset 0 1px 0 var(--line-d); }
         .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
         .gi:nth-child(n) { grid-column: auto; grid-row: auto; }
         .gi:nth-child(1), .gi:nth-child(8) { grid-column: span 2; grid-row: span 2; }
+      }
+      @media (max-width: 640px) {
+        .statsin { grid-template-columns: 1fr; }
+        .stat { padding: 32px 16px; }
+        .stat + .stat { box-shadow: inset 0 1px 0 var(--line-d); }
       }
       @media (max-width: 800px) {
         .grid2, .panel.on, .row { grid-template-columns: 1fr; }

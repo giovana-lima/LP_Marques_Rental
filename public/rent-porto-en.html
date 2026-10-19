@@ -352,7 +352,7 @@
 
       /* Números */
       .stats { background: var(--navy); color: #fff; }
-      .statsin { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); }
+      .statsin { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); }
       .stat { padding: clamp(44px, 6vw, 72px) clamp(16px, 2.4vw, 32px); text-align: center; }
       .stat + .stat { box-shadow: inset 1px 0 0 var(--line-d); }
       .num { font: 400 clamp(42px, 4.6vw, 60px)/1 var(--serif); color: var(--gold); font-variant-numeric: lining-nums tabular-nums; margin-bottom: 14px; }
@@ -485,12 +485,14 @@
         .topright { margin-left: auto; position: relative; z-index: 2; }
         .burger { display: block; }
         .topright .btn-sm { display: none; }
-        .statsin { grid-template-columns: repeat(2, 1fr); }
-        .stat:nth-child(3) { box-shadow: inset 0 1px 0 var(--line-d); }
-        .stat:nth-child(4) { box-shadow: inset 1px 0 0 var(--line-d), inset 0 1px 0 var(--line-d); }
         .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
         .gi:nth-child(n) { grid-column: auto; grid-row: auto; }
         .gi:nth-child(1), .gi:nth-child(8) { grid-column: span 2; grid-row: span 2; }
+      }
+      @media (max-width: 640px) {
+        .statsin { grid-template-columns: 1fr; }
+        .stat { padding: 32px 16px; }
+        .stat + .stat { box-shadow: inset 0 1px 0 var(--line-d); }
       }
       @media (max-width: 800px) {
         .grid2, .panel.on, .row { grid-template-columns: 1fr; }
@@ -538,10 +540,10 @@
     <header class="top" id="top">
       <div class="topin">
         <a class="logo" href="#hero" aria-label="Jardins do Marquês"><img src="assets/img/logo.png" alt="Youropa" width="133" height="22"></a>
-        <nav class="mainnav" id="mainnav" aria-label="Menu"><a href="#concept">The concept</a><a href="#location">Location</a><a href="#apartments">Apartments</a><a href="#gallery">Gallery</a><a class="navcta" href="#contact">Request details</a></nav>
+        <nav class="mainnav" id="mainnav" aria-label="Menu"><a href="#concept">The concept</a><a href="#location">Location</a><a href="#apartments">Apartments</a><a href="#gallery">Gallery</a><a class="navcta" href="#contact">Learn more</a></nav>
         <div class="topright">
           <a class="lang" href="https://arrendar-marques.youropapt.com/" hreflang="pt" title="Português">PT</a>
-          <a class="btn btn-sm" href="#contact">Request details</a>
+          <a class="btn btn-sm" href="#contact">Learn more</a>
           <button type="button" class="burger" aria-controls="mainnav" aria-expanded="false" aria-label="Menu"><span></span><span></span></button>
         </div>
       </div>
@@ -556,16 +558,16 @@
         <div class="herotxt">
           <span class="eyebrow">Jardins do Marquês · Rua do Bonjardim, Porto</span>
           <h1>Porto starts at your door.</h1>
-          <p>New T0, T1 and T2 apartments for rent, near Marquês metro. All with a balcony and a parking space. From €900/month.</p>
-          <div class="btns"><a class="btn" href="#contact">Request details</a><a class="btn btn-line" href="#apartments">See apartments</a></div>
+          <p>New apartments for rent, from T0 to T2 Duplex, near Marquês metro. All with a balcony and a parking space. From €900/month.</p>
+          <div class="btns"><a class="btn" href="#contact">Learn more</a><a class="btn btn-line" href="#apartments">See apartments</a></div>
         </div>
       </section>
 
       <section class="sec concept" id="concept">
         <div class="wrap grid2">
           <div class="txt reveal">
-            <h2>Homes ready for a new chapter.</h2>
-            <p>Jardins do Marquês is in a central area of Porto, where neighbourhood life meets shops, transport and everyday services.</p><p>Living here means keeping up with the city while having a calm place to rest. From studio to duplex, there is a home for every stage of life.</p>
+            <h2>Apartments ready for a new chapter.</h2>
+            <p>Jardins do Marquês is in central Porto, in an area where residential life meets shops, transport and everyday services.</p><p>Living here means keeping up with the city while having a calm place to rest. From studio to duplex, there is an apartment for every stage of life.</p>
             <p class="quote">Brand-new building, long-term rental.</p>
           </div>
           <figure class="imgtall reveal"><img src="assets/img/v2/sala.webp" alt="Living room of an apartment at Jardins do Marquês" loading="lazy" width="1920" height="1280"></figure>
@@ -573,14 +575,14 @@
       </section>
 
       <section class="stats" aria-label="Jardins do Marquês">
-        <ul class="wrap statsin"><li class="stat"><p class="num"><span class="count" data-to="170">170</span><small>m</small></p><p class="lbl">from Marquês metro</p></li><li class="stat"><p class="num"><span class="count" data-to="3">3</span></p><p class="lbl">apartment types: T0, T1 and T2</p></li><li class="stat"><p class="num"><span class="count" data-to="900">900</span><small>€/month</small></p><p class="lbl">rent from</p></li><li class="stat"><p class="num"><span class="count" data-to="100">100</span><small>%</small></p><p class="lbl">with balcony and parking space</p></li></ul>
+        <ul class="wrap statsin"><li class="stat"><p class="num"><span class="count" data-to="170">170</span><small>m</small></p><p class="lbl">from Marquês metro</p></li><li class="stat"><p class="num"><span class="count" data-to="900">900</span><small>€/month</small></p><p class="lbl">rent from</p></li><li class="stat"><p class="num"><span class="count" data-to="100">100</span><small>%</small></p><p class="lbl">with balcony and parking space</p></li></ul>
       </section>
 
       <section class="sec location" id="location">
         <div class="wrap grid2 loc">
           <figure class="imgwide reveal"><img style="object-position: 72% 50%" src="assets/img/v2/aerea-marques.webp" alt="Aerial view of Praça do Marquês and Jardins do Marquês" loading="lazy" width="1920" height="1080"></figure>
           <div class="txt reveal">
-            <h2>Close to everything, in a quiet neighbourhood.</h2>
+            <h2>Close to everything, in a quiet area.</h2>
             <p>Rua do Bonjardim links Marquês to the city centre. Metro, buses, shops and services are a few minutes away on foot.</p>
             <ol class="poi"><li><span class="n">01</span><span class="p">Marquês metro</span><span class="d">170 m</span></li><li><span class="n">02</span><span class="p">Bus stops</span><span class="d">180 m</span></li><li><span class="n">03</span><span class="p">Supermarket</span><span class="d">220 m</span></li><li><span class="n">04</span><span class="p">School</span><span class="d">300 m</span></li><li><span class="n">05</span><span class="p">Praça da República</span><span class="d">800 m</span></li><li><span class="n">06</span><span class="p">Trindade metro</span><span class="d">1 km</span></li><li><span class="n">07</span><span class="p">Rua de Santa Catarina and Baixa</span><span class="d">a few minutes</span></li><li><span class="n">08</span><span class="p">University area</span><span class="d">direct by metro</span></li></ol>
           </div>
@@ -594,7 +596,7 @@
       </section>
 
       <section class="slider" aria-roledescription="carousel">
-        <div class="track" id="track"><figure class="slide"><img src="assets/img/v2/varanda-render.webp" alt="Private balconies in every home" loading="lazy" width="1920" height="1280"><figcaption><span>1/4</span>Private balconies in every home</figcaption></figure><figure class="slide"><img src="assets/img/v2/cozinha.webp" alt="Fitted kitchens with granite worktops" loading="lazy" width="1920" height="1280"><figcaption><span>2/4</span>Fitted kitchens with granite worktops</figcaption></figure><figure class="slide"><img src="assets/img/v2/garagem.webp" alt="Parking space included" loading="lazy" width="1920" height="1280"><figcaption><span>3/4</span>Parking space included</figcaption></figure><figure class="slide"><img src="assets/img/v2/cobertura.webp" alt="Solar panels on the roof" loading="lazy" width="1920" height="1280"><figcaption><span>4/4</span>Solar panels on the roof</figcaption></figure></div>
+        <div class="track" id="track"><figure class="slide"><img src="assets/img/v2/varanda-render.webp" alt="Private balconies in every apartment" loading="lazy" width="1920" height="1280"><figcaption><span>1/4</span>Private balconies in every apartment</figcaption></figure><figure class="slide"><img src="assets/img/v2/cozinha.webp" alt="Fitted kitchens with granite worktops" loading="lazy" width="1920" height="1280"><figcaption><span>2/4</span>Fitted kitchens with granite worktops</figcaption></figure><figure class="slide"><img src="assets/img/v2/garagem.webp" alt="Parking space included" loading="lazy" width="1920" height="1280"><figcaption><span>3/4</span>Parking space included</figcaption></figure><figure class="slide"><img src="assets/img/v2/cobertura.webp" alt="Solar panels on the roof" loading="lazy" width="1920" height="1280"><figcaption><span>4/4</span>Solar panels on the roof</figcaption></figure></div>
         <div class="sliderctl">
           <button type="button" class="arrow" data-dir="-1" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
           <button type="button" class="arrow" data-dir="1" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
@@ -615,8 +617,8 @@
       <section class="sec apartments" id="apartments">
         <div class="wrap">
           <div class="head reveal">
-            <h2>Pick your home.</h2>
-            <p class="note">Long-term rental.</p>
+            <h2>Pick your apartment.</h2>
+            
           </div>
           <div id="prices">
             <div class="tabs" role="tablist"><button type="button" class="tab" role="tab" id="tab-T0" aria-controls="pn-T0" aria-selected="true" tabindex="0" data-t="T0">T0 · Studio</button><button type="button" class="tab" role="tab" id="tab-T1" aria-controls="pn-T1" aria-selected="false" tabindex="-1" data-t="T1">T1 · Duplex</button><button type="button" class="tab" role="tab" id="tab-T2" aria-controls="pn-T2" aria-selected="false" tabindex="-1" data-t="T2">T2 · Duplex</button></div>
@@ -632,7 +634,7 @@
               <h3>Studio near Marquês metro</h3>
               <p class="price"><small>From</small> €900<small>/month</small></p>
               <dl class="info"><div><dt>Gross area</dt><dd>38.7 m²</dd></div><div><dt>Balcony</dt><dd>6.28 m²</dd></div><div><dt>Layout</dt><dd>Open-plan studio · floor 1</dd></div><div><dt>Parking</dt><dd>1 space included</dd></div><div><dt>Kitchen</dt><dd>Built-in oven, hob, extractor, fridge-freezer, dishwasher, washer</dd></div><div><dt>Materials</dt><dd>Oak floating floors, lacquered cabinetry, grey granite worktops</dd></div><div><dt>Comfort</dt><dd>Solar panels, heat pump, air conditioning, thermal and acoustic insulation</dd></div></dl>
-              <a class="btn" href="#contact" data-pick="T0">Request details</a>
+              <a class="btn" href="#contact" data-pick="T0">Learn more</a>
             </div>
           </div>
           <div class="panel" id="pn-T1" role="tabpanel" aria-labelledby="tab-T1">
@@ -646,7 +648,7 @@
               <h3>T1 duplex with suite and office</h3>
               <p class="price"><small>From</small> €1,300<small>/month</small></p>
               <dl class="info"><div><dt>Gross area</dt><dd>64.9 m²</dd></div><div><dt>Balconies</dt><dd>23.08 m²</dd></div><div><dt>Layout</dt><dd>Duplex · floors 3–4. Entrance: living room, open kitchen and bathroom. Upper floor: suite with wardrobe and extra room (office, dressing room or guest)</dd></div><div><dt>Parking</dt><dd>1 space included</dd></div><div><dt>Kitchen</dt><dd>Built-in oven, hob, extractor, fridge-freezer, dishwasher, washer</dd></div><div><dt>Materials</dt><dd>Oak floating floors, lacquered cabinetry, grey granite worktops</dd></div><div><dt>Comfort</dt><dd>Solar panels, heat pump, air conditioning, thermal and acoustic insulation</dd></div></dl>
-              <a class="btn" href="#contact" data-pick="T1">Request details</a>
+              <a class="btn" href="#contact" data-pick="T1">Learn more</a>
             </div>
           </div>
           <div class="panel" id="pn-T2" role="tabpanel" aria-labelledby="tab-T2">
@@ -660,7 +662,7 @@
               <h3>T2 duplex for families</h3>
               <p class="price"><small>From</small> €1,500<small>/month</small></p>
               <dl class="info"><div><dt>Gross area</dt><dd>A: 78.81 m² · B: 83.65 m²</dd></div><div><dt>Balconies</dt><dd>A: 40.88 m² · B: 16.69 m²</dd></div><div><dt>Layout</dt><dd>Duplex · floors 3–4 · two layouts (A and B)</dd></div><div><dt>Parking</dt><dd>1 space included</dd></div><div><dt>Kitchen</dt><dd>Built-in oven, hob, extractor, fridge-freezer, dishwasher, washer</dd></div><div><dt>Materials</dt><dd>Oak floating floors, lacquered cabinetry, grey granite worktops</dd></div><div><dt>Comfort</dt><dd>Solar panels, heat pump, air conditioning, thermal and acoustic insulation</dd></div></dl>
-              <a class="btn" href="#contact" data-pick="T2">Request details</a>
+              <a class="btn" href="#contact" data-pick="T2">Learn more</a>
             </div>
           </div>
           </div>
@@ -672,7 +674,7 @@
           <div class="head reveal">
             <h2>Inside and out.</h2>
           </div>
-          <div class="grid"><button type="button" class="gi" data-full="assets/img/v2/fachada-render.webp" data-cap="Facade"><img src="assets/img/v2/fachada-render-sm.webp" alt="Facade" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/sala.webp" data-cap="Living room"><img src="assets/img/v2/sala-sm.webp" alt="Living room" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/quarto.webp" data-cap="Bedroom"><img src="assets/img/v2/quarto-sm.webp" alt="Bedroom" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/varanda-estudio.webp" data-cap="Balcony and studio"><img src="assets/img/v2/varanda-estudio-sm.webp" alt="Balcony and studio" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/cozinha.webp" data-cap="Kitchen"><img src="assets/img/v2/cozinha-sm.webp" alt="Kitchen" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/casa-de-banho.webp" data-cap="Bathroom"><img src="assets/img/v2/casa-de-banho-sm.webp" alt="Bathroom" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/duche.webp" data-cap="Shower"><img src="assets/img/v2/duche-sm.webp" alt="Shower" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/sala-render.webp" data-cap="Living room"><img src="assets/img/v2/sala-render-sm.webp" alt="Living room" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/varanda-render.webp" data-cap="Outdoor gallery"><img src="assets/img/v2/varanda-render-sm.webp" alt="Outdoor gallery" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/rua-interior.webp" data-cap="Inner street"><img src="assets/img/v2/rua-interior-sm.webp" alt="Inner street" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/fachada.webp" data-cap="Facade"><img src="assets/img/v2/fachada-sm.webp" alt="Facade" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/rua-acesso.webp" data-cap="Building access"><img src="assets/img/v2/rua-acesso-sm.webp" alt="Building access" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/aerea-igreja.webp" data-cap="Aerial view"><img src="assets/img/v2/aerea-igreja-sm.webp" alt="Aerial view" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/aerea-bairro.webp" data-cap="The neighbourhood"><img src="assets/img/v2/aerea-bairro-sm.webp" alt="The neighbourhood" loading="lazy"></button></div>
+          <div class="grid"><button type="button" class="gi" data-full="assets/img/v2/fachada-render.webp" data-cap="Facade"><img src="assets/img/v2/fachada-render-sm.webp" alt="Facade" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/sala.webp" data-cap="Living room"><img src="assets/img/v2/sala-sm.webp" alt="Living room" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/quarto.webp" data-cap="Bedroom"><img src="assets/img/v2/quarto-sm.webp" alt="Bedroom" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/varanda-estudio.webp" data-cap="Balcony and studio"><img src="assets/img/v2/varanda-estudio-sm.webp" alt="Balcony and studio" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/cozinha.webp" data-cap="Kitchen"><img src="assets/img/v2/cozinha-sm.webp" alt="Kitchen" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/casa-de-banho.webp" data-cap="Bathroom"><img src="assets/img/v2/casa-de-banho-sm.webp" alt="Bathroom" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/duche.webp" data-cap="Shower"><img src="assets/img/v2/duche-sm.webp" alt="Shower" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/sala-render.webp" data-cap="Living room"><img src="assets/img/v2/sala-render-sm.webp" alt="Living room" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/varanda-render.webp" data-cap="Outdoor gallery"><img src="assets/img/v2/varanda-render-sm.webp" alt="Outdoor gallery" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/rua-interior.webp" data-cap="Inner street"><img src="assets/img/v2/rua-interior-sm.webp" alt="Inner street" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/fachada.webp" data-cap="Facade"><img src="assets/img/v2/fachada-sm.webp" alt="Facade" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/rua-acesso.webp" data-cap="Building access"><img src="assets/img/v2/rua-acesso-sm.webp" alt="Building access" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/aerea-igreja.webp" data-cap="Aerial view"><img src="assets/img/v2/aerea-igreja-sm.webp" alt="Aerial view" loading="lazy"></button><button type="button" class="gi" data-full="assets/img/v2/aerea-bairro.webp" data-cap="The area"><img src="assets/img/v2/aerea-bairro-sm.webp" alt="The area" loading="lazy"></button></div>
         </div>
       </section>
 
