@@ -193,20 +193,18 @@
       (function () {
         var fig = document.getElementById("zona");
         if (!fig) return;
-        var imgs = fig.querySelectorAll(".zf"), dots = fig.querySelectorAll(".zdot");
-        var HOLD = [2000, 3600, 3600], cur = 1, timer = null, visible = false;
+        var imgs = fig.querySelectorAll(".zf");
+        var HOLD = 2000, cur = 1, timer = null, visible = false;
         var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         function show(i) {
           cur = i;
           for (var k = 0; k < imgs.length; k++) {
             imgs[k].classList.toggle("on", k === i);
             if (k === i) imgs[k].removeAttribute("aria-hidden"); else imgs[k].setAttribute("aria-hidden", "true");
-            if (k === i) dots[k].setAttribute("aria-current", "true"); else dots[k].removeAttribute("aria-current");
           }
         }
         function stop() { clearTimeout(timer); timer = null; }
-        function next() { stop(); if (still || !visible || document.hidden) return; timer = setTimeout(function () { show((cur + 1) % imgs.length); next(); }, HOLD[cur] + 1400); }
-        for (var k = 0; k < dots.length; k++) dots[k].addEventListener("click", function () { show(+this.getAttribute("data-z")); next(); });
+        function next() { stop(); if (still || !visible || document.hidden) return; timer = setTimeout(function () { show((cur + 1) % imgs.length); next(); }, HOLD + 1000); }
         if (!still) show(0);
         if ("IntersectionObserver" in window) {
           new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) { if (!timer) next(); } else stop(); }, { threshold: 0.35 }).observe(fig);
