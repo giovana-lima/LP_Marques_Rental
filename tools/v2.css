@@ -229,7 +229,10 @@
         .lightbox[open] { grid-template-columns: 1fr; }
         .lbnav { position: fixed; bottom: 20px; }
         .lbnav[data-dir="-1"] { left: 20px; } .lbnav[data-dir="1"] { right: 20px; }
-        .tab { padding: 16px 14px; font-size: 12px; letter-spacing: 0.12em; }
+        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); overflow: visible; }
+        .tab { padding: 14px 4px; display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 15px; letter-spacing: 0.08em; }
+        .tab .td { display: none; }
+        .tab .tn { font-size: 10.5px; letter-spacing: 0.12em; }
         .poi li { grid-template-columns: 36px 1fr; }
         .poi .d { grid-column: 2; text-align: left; }
       }

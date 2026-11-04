@@ -28,7 +28,7 @@
     <link rel="icon" href="/assets/img/favicon.ico?v=3" sizes="48x48" />
     <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png?v=3" />
     <title>Apartamentos para arrendar na Rua do Bonjardim, junto ao metro do Marquês, Porto | Youropa</title>
-    <meta name="description" content="Novos apartamentos T0, T1 e T2 para arrendar na Rua do Bonjardim, Porto. Estacionamento e varanda incluídos. A partir de €900/mês." />
+    <meta name="description" content="Novos apartamentos T0, T1, T2 e T3 para arrendar na Rua do Bonjardim, Porto. Estacionamento e varanda incluídos. A partir de €850/mês." />
     <link rel="preload" href="assets/fonts/gambarino.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/bespoke.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" as="image" href="assets/img/v2/fachada-render.webp" media="(min-width: 801px)" />
@@ -45,7 +45,7 @@
     />
     <meta
       property="og:description"
-      content="Novos apartamentos T0, T1 e T2 para arrendar na Rua do Bonjardim, Porto. Estacionamento e varanda incluídos. A partir de €900/mês."
+      content="Novos apartamentos T0, T1, T2 e T3 para arrendar na Rua do Bonjardim, Porto. Estacionamento e varanda incluídos. A partir de €850/mês."
     />
     <meta
       property="og:image"
@@ -133,11 +133,11 @@
                 "offers": {
                   "@type": "Offer",
                   "businessFunction": "http://purl.org/goodrelations/v1#LeaseOut",
-                  "price": 900,
+                  "price": 850,
                   "priceCurrency": "EUR",
                   "priceSpecification": {
                     "@type": "UnitPriceSpecification",
-                    "price": 900,
+                    "price": 850,
                     "priceCurrency": "EUR",
                     "unitCode": "MON",
                     "referenceQuantity": {
@@ -189,11 +189,11 @@
                 "offers": {
                   "@type": "Offer",
                   "businessFunction": "http://purl.org/goodrelations/v1#LeaseOut",
-                  "price": 1300,
+                  "price": 1250,
                   "priceCurrency": "EUR",
                   "priceSpecification": {
                     "@type": "UnitPriceSpecification",
-                    "price": 1300,
+                    "price": 1250,
                     "priceCurrency": "EUR",
                     "unitCode": "MON",
                     "referenceQuantity": {
@@ -261,6 +261,62 @@
                   },
                   "availability": "https://schema.org/InStock",
                   "url": "https://arrendar-marques.youropapt.com/?type=T2",
+                  "offeredBy": {
+                    "@id": "https://www.youropapt.com/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "Apartment",
+                "name": "T3 – Duplex",
+                "numberOfBedrooms": 3,
+                "floorSize": {
+                  "@type": "QuantitativeValue",
+                  "unitCode": "MTK",
+                  "value": 104.2
+                },
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "Rua do Bonjardim 1089",
+                  "postalCode": "4000-307",
+                  "addressLocality": "Porto",
+                  "addressCountry": "PT"
+                },
+                "amenityFeature": [
+                  {
+                    "@type": "LocationFeatureSpecification",
+                    "name": "Estacionamento",
+                    "value": true
+                  },
+                  {
+                    "@type": "LocationFeatureSpecification",
+                    "name": "Varanda",
+                    "value": true
+                  },
+                  {
+                    "@type": "LocationFeatureSpecification",
+                    "name": "Ar condicionado",
+                    "value": true
+                  }
+                ],
+                "offers": {
+                  "@type": "Offer",
+                  "businessFunction": "http://purl.org/goodrelations/v1#LeaseOut",
+                  "price": 2290,
+                  "priceCurrency": "EUR",
+                  "priceSpecification": {
+                    "@type": "UnitPriceSpecification",
+                    "price": 2290,
+                    "priceCurrency": "EUR",
+                    "unitCode": "MON",
+                    "referenceQuantity": {
+                      "@type": "QuantitativeValue",
+                      "value": 1,
+                      "unitCode": "MON"
+                    }
+                  },
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://arrendar-marques.youropapt.com/?type=T3",
                   "offeredBy": {
                     "@id": "https://www.youropapt.com/#organization"
                   }
@@ -508,7 +564,10 @@
         .lightbox[open] { grid-template-columns: 1fr; }
         .lbnav { position: fixed; bottom: 20px; }
         .lbnav[data-dir="-1"] { left: 20px; } .lbnav[data-dir="1"] { right: 20px; }
-        .tab { padding: 16px 14px; font-size: 12px; letter-spacing: 0.12em; }
+        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); overflow: visible; }
+        .tab { padding: 14px 4px; display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 15px; letter-spacing: 0.08em; }
+        .tab .td { display: none; }
+        .tab .tn { font-size: 10.5px; letter-spacing: 0.12em; }
         .poi li { grid-template-columns: 36px 1fr; }
         .poi .d { grid-column: 2; text-align: left; }
       }
@@ -561,7 +620,7 @@
         <div class="herotxt">
           <span class="eyebrow">Jardins do Marquês · Rua do Bonjardim, Porto</span>
           <h1>O Porto começa à sua porta.</h1>
-          <p>Apartamentos novos para arrendar, do T0 ao T2 Duplex, junto ao metro do Marquês. Todos com varanda e lugar de garagem. Desde €900/mês.</p>
+          <p>Apartamentos novos para arrendar, do T0 ao T3 Duplex, junto ao metro do Marquês. Todos com varanda e lugar de garagem. Desde €850/mês.</p>
           <div class="btns"><a class="btn" href="#contact">Saiba mais</a><a class="btn btn-line" href="#apartments">Ver apartamentos</a></div>
         </div>
       </section>
@@ -578,7 +637,7 @@
       </section>
 
       <section class="stats" aria-label="Jardins do Marquês">
-        <ul class="wrap statsin"><li class="stat"><p class="num"><span class="count" data-to="170">170</span><small>m</small></p><p class="lbl">do metro do Marquês</p></li><li class="stat"><p class="num"><span class="count" data-to="900">900</span><small>€/mês</small></p><p class="lbl">renda desde</p></li><li class="stat"><p class="num"><span class="count" data-to="100">100</span><small>%</small></p><p class="lbl">com varanda e lugar de garagem</p></li></ul>
+        <ul class="wrap statsin"><li class="stat"><p class="num"><span class="count" data-to="170">170</span><small>m</small></p><p class="lbl">do metro do Marquês</p></li><li class="stat"><p class="num"><span class="count" data-to="850">850</span><small>€/mês</small></p><p class="lbl">renda desde</p></li><li class="stat"><p class="num"><span class="count" data-to="100">100</span><small>%</small></p><p class="lbl">com varanda e lugar de garagem</p></li></ul>
       </section>
 
       <section class="sec location" id="location">
@@ -624,7 +683,7 @@
             
           </div>
           <div id="prices">
-            <div class="tabs" role="tablist"><button type="button" class="tab" role="tab" id="tab-T0" aria-controls="pn-T0" aria-selected="true" tabindex="0" data-t="T0">T0 · Estúdio</button><button type="button" class="tab" role="tab" id="tab-T1" aria-controls="pn-T1" aria-selected="false" tabindex="-1" data-t="T1">T1 · Duplex</button><button type="button" class="tab" role="tab" id="tab-T2" aria-controls="pn-T2" aria-selected="false" tabindex="-1" data-t="T2">T2 · Duplex</button></div>
+            <div class="tabs" role="tablist"><button type="button" class="tab" role="tab" id="tab-T0" aria-controls="pn-T0" aria-selected="true" tabindex="0" data-t="T0"><span class="tc">T0</span><span class="td"> · </span><span class="tn">Estúdio</span></button><button type="button" class="tab" role="tab" id="tab-T1" aria-controls="pn-T1" aria-selected="false" tabindex="-1" data-t="T1"><span class="tc">T1</span><span class="td"> · </span><span class="tn">Duplex</span></button><button type="button" class="tab" role="tab" id="tab-T2" aria-controls="pn-T2" aria-selected="false" tabindex="-1" data-t="T2"><span class="tc">T2</span><span class="td"> · </span><span class="tn">Duplex</span></button><button type="button" class="tab" role="tab" id="tab-T3" aria-controls="pn-T3" aria-selected="false" tabindex="-1" data-t="T3"><span class="tc">T3</span><span class="td"> · </span><span class="tn">Duplex</span></button></div>
             
           <div class="panel on" id="pn-T0" role="tabpanel" aria-labelledby="tab-T0">
             <div class="pmedia">
@@ -635,7 +694,7 @@
             <div class="pinfo">
               <span class="ptype">T0 · Estúdio</span>
               <h3>Estúdio junto ao metro do Marquês</h3>
-              <p class="price"><small>Desde</small> €900<small>/mês</small></p>
+              <p class="price"><small>Desde</small> €850<small>/mês</small></p>
               <dl class="info"><div><dt>Área bruta</dt><dd>38,7 m²</dd></div><div><dt>Varanda</dt><dd>6,28 m²</dd></div><div><dt>Distribuição</dt><dd>Estúdio em espaço aberto · piso 1</dd></div><div><dt>Estacionamento</dt><dd>1 lugar incluído</dd></div><div><dt>Cozinha</dt><dd>Forno, placa, exaustor, combinado, máquina de lavar loiça e roupa embutidos</dd></div><div><dt>Materiais</dt><dd>Pavimento flutuante em carvalho, armários lacados, bancadas em granito cinzento</dd></div><div><dt>Conforto</dt><dd>Painéis fotovoltaicos, bomba de calor, ar condicionado, isolamento térmico e acústico</dd></div></dl>
               <a class="btn" href="#contact" data-pick="T0">Saiba mais</a>
             </div>
@@ -649,7 +708,7 @@
             <div class="pinfo">
               <span class="ptype">T1 · Duplex</span>
               <h3>Duplex T1 com suíte e escritório</h3>
-              <p class="price"><small>Desde</small> €1.300<small>/mês</small></p>
+              <p class="price"><small>Desde</small> €1.250<small>/mês</small></p>
               <dl class="info"><div><dt>Área bruta</dt><dd>64,9 m²</dd></div><div><dt>Varandas</dt><dd>23,08 m²</dd></div><div><dt>Distribuição</dt><dd>Duplex · pisos 3–4. Entrada: sala, cozinha aberta e casa de banho. Piso superior: suíte com roupeiro e quarto extra (escritório, closet ou hóspedes)</dd></div><div><dt>Estacionamento</dt><dd>1 lugar incluído</dd></div><div><dt>Cozinha</dt><dd>Forno, placa, exaustor, combinado, máquina de lavar loiça e roupa embutidos</dd></div><div><dt>Materiais</dt><dd>Pavimento flutuante em carvalho, armários lacados, bancadas em granito cinzento</dd></div><div><dt>Conforto</dt><dd>Painéis fotovoltaicos, bomba de calor, ar condicionado, isolamento térmico e acústico</dd></div></dl>
               <a class="btn" href="#contact" data-pick="T1">Saiba mais</a>
             </div>
@@ -666,6 +725,20 @@
               <p class="price"><small>Desde</small> €1.500<small>/mês</small></p>
               <dl class="info"><div><dt>Área bruta</dt><dd>A: 78,81 m² · B: 83,65 m²</dd></div><div><dt>Varandas</dt><dd>A: 40,88 m² · B: 16,69 m²</dd></div><div><dt>Distribuição</dt><dd>Duplex · pisos 3–4 · duas opções (A e B)</dd></div><div><dt>Estacionamento</dt><dd>1 lugar incluído</dd></div><div><dt>Cozinha</dt><dd>Forno, placa, exaustor, combinado, máquina de lavar loiça e roupa embutidos</dd></div><div><dt>Materiais</dt><dd>Pavimento flutuante em carvalho, armários lacados, bancadas em granito cinzento</dd></div><div><dt>Conforto</dt><dd>Painéis fotovoltaicos, bomba de calor, ar condicionado, isolamento térmico e acústico</dd></div></dl>
               <a class="btn" href="#contact" data-pick="T2">Saiba mais</a>
+            </div>
+          </div>
+          <div class="panel" id="pn-T3" role="tabpanel" aria-labelledby="tab-T3">
+            <div class="pmedia">
+              <img class="pphoto" src="assets/img/t3.webp" alt="Duplex T3 no Jardins do Marquês" loading="lazy" width="1200" height="675">
+              <p class="plabel">Plantas</p>
+              <div class="plans"><button type="button" class="plan" data-full="assets/img/planta-t3-piso1.webp" data-cap="T3 · Piso 1"><img src="assets/img/planta-t3-piso1.webp" alt="T3 · Piso 1" loading="lazy"><span>Piso 1</span></button><button type="button" class="plan" data-full="assets/img/planta-t3-piso2.webp" data-cap="T3 · Piso 2"><img src="assets/img/planta-t3-piso2.webp" alt="T3 · Piso 2" loading="lazy"><span>Piso 2</span></button></div>
+            </div>
+            <div class="pinfo">
+              <span class="ptype">T3 · Duplex</span>
+              <h3>Duplex T3 com três quartos</h3>
+              <p class="price"><small>Desde</small> €2.290<small>/mês</small></p>
+              <dl class="info"><div><dt>Área bruta</dt><dd>104,20 m²</dd></div><div><dt>Varandas</dt><dd>33,42 m²</dd></div><div><dt>Distribuição</dt><dd>Duplex · pisos 3–4. Entrada: sala com zona de refeições, cozinha aberta, casa de banho e arrumos. Piso superior: três quartos (dois de casal e um individual), duas casas de banho e roupeiros</dd></div><div><dt>Estacionamento</dt><dd>2 lugares incluídos</dd></div><div><dt>Cozinha</dt><dd>Forno, placa, exaustor, combinado, máquina de lavar loiça e roupa embutidos</dd></div><div><dt>Materiais</dt><dd>Pavimento flutuante em carvalho, armários lacados, bancadas em granito cinzento</dd></div><div><dt>Conforto</dt><dd>Painéis fotovoltaicos, bomba de calor, ar condicionado, isolamento térmico e acústico</dd></div></dl>
+              <a class="btn" href="#contact" data-pick="T3">Saiba mais</a>
             </div>
           </div>
           </div>
@@ -701,7 +774,7 @@
               <div><label for="phone">Telefone</label><input id="phone" name="phone" type="tel" required autocomplete="tel" /></div>
               <div><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" /></div>
             </div>
-            <div><label for="type">Que tipologia de apartamento procura?</label><select id="type" name="typology" required><option value="" selected disabled>Selecionar</option><option value="T0">T0 – Estúdio</option><option value="T1">T1 – Duplex</option><option value="T2">T2 – Duplex</option></select></div>
+            <div><label for="type">Que tipologia de apartamento procura?</label><select id="type" name="typology" required><option value="" selected disabled>Selecionar</option><option value="T0">T0 – Estúdio</option><option value="T1">T1 – Duplex</option><option value="T2">T2 – Duplex</option><option value="T3">T3 – Duplex</option></select></div>
             <div><label for="budget">O valor inicial da renda da tipologia que prefere está dentro do seu orçamento?</label><select id="budget" name="within_budget" required><option value="" selected disabled>Selecionar</option><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
             <div><label for="move">Está disponível para se mudar…</label><select id="move" name="move_in_timing" required><option value="" selected disabled>Selecionar</option><option value="Imediatamente">Imediatamente</option><option value="Nos próximos 3 meses">Nos próximos 3 meses</option><option value="Daqui a 3 meses ou mais">Daqui a 3 meses ou mais</option></select></div>
             <div style="position: absolute; left: -9999px" aria-hidden="true"><label>Leave empty<input name="website" tabindex="-1" autocomplete="off" /></label></div>
@@ -859,7 +932,7 @@
       });
 
       // ---- Formulário: referência por tipologia
-      var REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043" };
+      var REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043", T3: "YR00096" };
       var type = document.getElementById("type"), ref = document.getElementById("ref");
       function setRef() { ref.value = REFS[type.value] || ""; }
       type.addEventListener("change", setRef);
@@ -876,7 +949,7 @@
       });
       document.getElementById("campaign").value = q.get("utm_campaign") || "";
 
-      // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1 ou ?type=T2
+      // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1, ?type=T2 ou ?type=T3
       var typeParam = (q.get("type") || "").toUpperCase();
       if (REFS[typeParam]) {
         type.value = typeParam;

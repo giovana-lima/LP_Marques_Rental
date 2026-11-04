@@ -37,7 +37,7 @@ T = {
   cta='Saiba mais', menu='Menu', close='Fechar',
   hero_eyebrow='Jardins do Marquês · Rua do Bonjardim, Porto',
   hero_h1='O Porto começa à sua porta.',
-  hero_sub='Apartamentos novos para arrendar, do T0 ao T2 Duplex, junto ao metro do Marquês. Todos com varanda e lugar de garagem. Desde €900/mês.',
+  hero_sub='Apartamentos novos para arrendar, do T0 ao T3 Duplex, junto ao metro do Marquês. Todos com varanda e lugar de garagem. Desde €850/mês.',
   hero_btn2='Ver apartamentos',
   hero_alt='Fachada do Jardins do Marquês, Porto',
   concept_k='01 — O conceito', concept_h='Apartamentos preparados para uma nova etapa.',
@@ -45,7 +45,7 @@ T = {
              'Viver aqui significa acompanhar o ritmo da cidade sem abdicar de um espaço reservado para descansar. Do estúdio ao duplex, há um apartamento para cada fase da vida.'],
   concept_quote='Edifício novo, arrendamento de longa duração.',
   concept_alt='Sala de estar de um apartamento no Jardins do Marquês',
-  stats=[('170', 'm', 'do metro do Marquês'), ('900', '€/mês', 'renda desde'), ('100', '%', 'com varanda e lugar de garagem')],
+  stats=[('170', 'm', 'do metro do Marquês'), ('850', '€/mês', 'renda desde'), ('100', '%', 'com varanda e lugar de garagem')],
   loc_k='02 — Localização', loc_h='No centro de tudo, numa zona tranquila.',
   loc_p='A Rua do Bonjardim liga o Marquês à Baixa. O metro, os autocarros, o comércio e os serviços estão a poucos minutos a pé.',
   loc_list=[('Metro do Marquês', '170 m'), ('Paragens de autocarro', '180 m'), ('Supermercado', '220 m'), ('Escola', '300 m'),
@@ -67,15 +67,18 @@ T = {
                ('Materiais', 'Pavimento flutuante em carvalho, armários lacados, bancadas em granito cinzento'),
                ('Conforto', 'Painéis fotovoltaicos, bomba de calor, ar condicionado, isolamento térmico e acústico')],
   apts=[
-   dict(code='T0', tab='T0 · Estúdio', title='Estúdio junto ao metro do Marquês', price='900', img='t0', alt='Estúdio T0 no Jardins do Marquês',
+   dict(code='T0', tab='T0 · Estúdio', title='Estúdio junto ao metro do Marquês', price='850', img='t0', alt='Estúdio T0 no Jardins do Marquês',
         rows=[('Área bruta', '38,7 m²'), ('Varanda', '6,28 m²'), ('Distribuição', 'Estúdio em espaço aberto · piso 1')],
         plans=[('planta-t0', 'Planta do estúdio')]),
-   dict(code='T1', tab='T1 · Duplex', title='Duplex T1 com suíte e escritório', price='1.300', img='t1', alt='Duplex T1 no Jardins do Marquês',
+   dict(code='T1', tab='T1 · Duplex', title='Duplex T1 com suíte e escritório', price='1.250', img='t1', alt='Duplex T1 no Jardins do Marquês',
         rows=[('Área bruta', '64,9 m²'), ('Varandas', '23,08 m²'), ('Distribuição', 'Duplex · pisos 3–4. Entrada: sala, cozinha aberta e casa de banho. Piso superior: suíte com roupeiro e quarto extra (escritório, closet ou hóspedes)')],
         plans=[('planta-t1-piso1', 'Piso 1'), ('planta-t1-piso2', 'Piso 2')]),
    dict(code='T2', tab='T2 · Duplex', title='Duplex T2 para famílias', price='1.500', img='t2', alt='Duplex T2 no Jardins do Marquês',
         rows=[('Área bruta', 'A: 78,81 m² · B: 83,65 m²'), ('Varandas', 'A: 40,88 m² · B: 16,69 m²'), ('Distribuição', 'Duplex · pisos 3–4 · duas opções (A e B)')],
         plans=[('planta-t1-piso1', 'Opção A · Piso 1'), ('planta-t2a-piso2', 'Opção A · Piso 2'), ('planta-t2b-piso1', 'Opção B · Piso 1'), ('planta-t2b-piso2', 'Opção B · Piso 2')]),
+   dict(code='T3', tab='T3 · Duplex', title='Duplex T3 com três quartos', price='2.290', img='t3', alt='Duplex T3 no Jardins do Marquês', park='2 lugares incluídos',
+        rows=[('Área bruta', '104,20 m²'), ('Varandas', '33,42 m²'), ('Distribuição', 'Duplex · pisos 3–4. Entrada: sala com zona de refeições, cozinha aberta, casa de banho e arrumos. Piso superior: três quartos (dois de casal e um individual), duas casas de banho e roupeiros')],
+        plans=[('planta-t3-piso1', 'Piso 1'), ('planta-t3-piso2', 'Piso 2')]),
   ],
   gal_k='05 — Galeria', gal_h='Por dentro e por fora.', gal_note='',
   gallery=[('fachada-render', 'Fachada'), ('sala', 'Sala de estar'), ('quarto', 'Quarto'), ('varanda-estudio', 'Varanda e estúdio'),
@@ -86,7 +89,7 @@ T = {
   steps=['Envie o seu pedido', 'A nossa equipa contacta-o', 'Visite o apartamento'],
   office='Escritório', phone_l='Telefone',
   f_name='Nome completo', f_phone='Telefone', f_email='Email', f_type='Que tipologia de apartamento procura?', sel='Selecionar',
-  types=[('T0', 'T0 – Estúdio'), ('T1', 'T1 – Duplex'), ('T2', 'T2 – Duplex')],
+  types=[('T0', 'T0 – Estúdio'), ('T1', 'T1 – Duplex'), ('T2', 'T2 – Duplex'), ('T3', 'T3 – Duplex')],
   f_budget='O valor inicial da renda da tipologia que prefere está dentro do seu orçamento?', budget=[('Sim', 'Sim'), ('Não', 'Não')],
   f_move='Está disponível para se mudar…', move=[('Imediatamente', 'Imediatamente'), ('Nos próximos 3 meses', 'Nos próximos 3 meses'), ('Daqui a 3 meses ou mais', 'Daqui a 3 meses ou mais')],
   consent='Aceito ser contactado(a) pela Youropa sobre este pedido.', submit='Enviar pedido',
@@ -102,7 +105,7 @@ T = {
   cta='Learn more', menu='Menu', close='Close',
   hero_eyebrow='Jardins do Marquês · Rua do Bonjardim, Porto',
   hero_h1='Porto starts at your door.',
-  hero_sub='New apartments for rent, from T0 to T2 Duplex, near Marquês metro. All with a balcony and a parking space. From €900/month.',
+  hero_sub='New apartments for rent, from T0 to T3 Duplex, near Marquês metro. All with a balcony and a parking space. From €850/month.',
   hero_btn2='See apartments',
   hero_alt='Facade of Jardins do Marquês, Porto',
   concept_k='01 — The concept', concept_h='Apartments ready for a new chapter.',
@@ -110,7 +113,7 @@ T = {
              'Living here means keeping up with the city while having a calm place to rest. From studio to duplex, there is an apartment for every stage of life.'],
   concept_quote='Brand-new building, long-term rental.',
   concept_alt='Living room of an apartment at Jardins do Marquês',
-  stats=[('170', 'm', 'from Marquês metro'), ('900', '€/month', 'rent from'), ('100', '%', 'with balcony and parking space')],
+  stats=[('170', 'm', 'from Marquês metro'), ('850', '€/month', 'rent from'), ('100', '%', 'with balcony and parking space')],
   loc_k='02 — Location', loc_h='Close to everything, in a quiet neighbourhood.',
   loc_p='Rua do Bonjardim links Marquês to the city centre. Metro, buses, shops and services are a few minutes away on foot.',
   loc_list=[('Marquês metro', '170 m'), ('Bus stops', '180 m'), ('Supermarket', '220 m'), ('School', '300 m'),
@@ -132,15 +135,18 @@ T = {
                ('Materials', 'Oak floating floors, lacquered cabinetry, grey granite worktops'),
                ('Comfort', 'Solar panels, heat pump, air conditioning, thermal and acoustic insulation')],
   apts=[
-   dict(code='T0', tab='T0 · Studio', title='Studio near Marquês metro', price='900', img='t0', alt='T0 studio at Jardins do Marquês',
+   dict(code='T0', tab='T0 · Studio', title='Studio near Marquês metro', price='850', img='t0', alt='T0 studio at Jardins do Marquês',
         rows=[('Gross area', '38.7 m²'), ('Balcony', '6.28 m²'), ('Layout', 'Open-plan studio · floor 1')],
         plans=[('planta-t0', 'Studio plan')]),
-   dict(code='T1', tab='T1 · Duplex', title='T1 duplex with suite and office', price='1,300', img='t1', alt='T1 duplex at Jardins do Marquês',
+   dict(code='T1', tab='T1 · Duplex', title='T1 duplex with suite and office', price='1,250', img='t1', alt='T1 duplex at Jardins do Marquês',
         rows=[('Gross area', '64.9 m²'), ('Balconies', '23.08 m²'), ('Layout', 'Duplex · floors 3–4. Entrance: living room, open kitchen and bathroom. Upper floor: suite with wardrobe and extra room (office, dressing room or guest)')],
         plans=[('planta-t1-piso1', 'Level 1'), ('planta-t1-piso2', 'Level 2')]),
    dict(code='T2', tab='T2 · Duplex', title='T2 duplex for families', price='1,500', img='t2', alt='T2 duplex at Jardins do Marquês',
         rows=[('Gross area', 'A: 78.81 m² · B: 83.65 m²'), ('Balconies', 'A: 40.88 m² · B: 16.69 m²'), ('Layout', 'Duplex · floors 3–4 · two layouts (A and B)')],
         plans=[('planta-t1-piso1', 'Layout A · Level 1'), ('planta-t2a-piso2', 'Layout A · Level 2'), ('planta-t2b-piso1', 'Layout B · Level 1'), ('planta-t2b-piso2', 'Layout B · Level 2')]),
+   dict(code='T3', tab='T3 · Duplex', title='T3 duplex with three bedrooms', price='2,290', img='t3', alt='T3 duplex at Jardins do Marquês', park='2 spaces included',
+        rows=[('Gross area', '104.20 m²'), ('Balconies', '33.42 m²'), ('Layout', 'Duplex · floors 3–4. Entrance: living and dining room, open kitchen, bathroom and storage. Upper floor: three bedrooms (two doubles and one single), two bathrooms and wardrobes')],
+        plans=[('planta-t3-piso1', 'Level 1'), ('planta-t3-piso2', 'Level 2')]),
   ],
   gal_k='05 — Gallery', gal_h='Inside and out.', gal_note='',
   gallery=[('fachada-render', 'Facade'), ('sala', 'Living room'), ('quarto', 'Bedroom'), ('varanda-estudio', 'Balcony and studio'),
@@ -151,7 +157,7 @@ T = {
   steps=['Send us your request', 'Our team contacts you', 'Visit the apartment'],
   office='Office', phone_l='Phone',
   f_name='Full name', f_phone='Phone', f_email='Email', f_type='Which apartment type are you interested in?', sel='Select',
-  types=[('T0', 'T0 – Studio'), ('T1', 'T1 – Duplex'), ('T2', 'T2 – Duplex')],
+  types=[('T0', 'T0 – Studio'), ('T1', 'T1 – Duplex'), ('T2', 'T2 – Duplex'), ('T3', 'T3 – Duplex')],
   f_budget='Is the starting rent for your preferred apartment type within your budget?', budget=[('Yes', 'Yes'), ('No', 'No')],
   f_move='Are you ready to move in…', move=[('Immediately', 'Immediately'), ('Within the next 3 months', 'Within the next 3 months'), ('In 3 months or more', 'In 3 months or more')],
   consent='I agree to be contacted by Youropa about this request.', submit='Send request',
@@ -188,10 +194,10 @@ def build(lang):
         return img
     slides = ''.join(f'<figure class="slide">{slide_img(k, f, c)}<figcaption><span>{k+1}/{len(t["slides"])}</span>{e(c)}</figcaption></figure>' for k, (f, c) in enumerate(t['slides']))
     amen = ''.join(f'<li>{ICON_CHECK}<span>{e(a)}</span></li>' for a in t['amen'])
-    tabs = ''.join(f'<button type="button" class="tab" role="tab" id="tab-{a["code"]}" aria-controls="pn-{a["code"]}" aria-selected="{"true" if k == 0 else "false"}" tabindex="{0 if k == 0 else -1}" data-t="{a["code"]}">{e(a["tab"])}</button>' for k, a in enumerate(t['apts']))
+    tabs = ''.join(f'<button type="button" class="tab" role="tab" id="tab-{a["code"]}" aria-controls="pn-{a["code"]}" aria-selected="{"true" if k == 0 else "false"}" tabindex="{0 if k == 0 else -1}" data-t="{a["code"]}"><span class="tc">{e(a["tab"].split(" · ")[0])}</span><span class="td"> · </span><span class="tn">{e(a["tab"].split(" · ")[1])}</span></button>' for k, a in enumerate(t['apts']))
     panels = ''
     for k, a in enumerate(t['apts']):
-        rows = ''.join(f'<div><dt>{e(x)}</dt><dd>{e(y)}</dd></div>' for x, y in a['rows'] + t['rows_common'])
+        rows = ''.join(f'<div><dt>{e(x)}</dt><dd>{e(y)}</dd></div>' for x, y in a['rows'] + [(x, a.get('park', y)) if i == 0 else (x, y) for i, (x, y) in enumerate(t['rows_common'])])
         plans = ''.join(f'<button type="button" class="plan" data-full="assets/img/{p}.webp" data-cap="{e(a["code"] + " · " + c)}"><img src="assets/img/{p}.webp" alt="{e(a["code"] + " · " + c)}" loading="lazy"><span>{e(c)}</span></button>' for p, c in a['plans'])
         panels += f'''
           <div class="panel{' on' if k == 0 else ''}" id="pn-{a['code']}" role="tabpanel" aria-labelledby="tab-{a['code']}">

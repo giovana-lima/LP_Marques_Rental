@@ -11,7 +11,7 @@ import nodemailer from "nodemailer";
 const DEFAULT_TO = "i.youroparealestateportugal.14287@inmovilla.com";
 
 // Referência do imóvel por tipologia
-const REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043" };
+const REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043", T3: "YR00096" };
 
 export function buildEmail(data) {
   const clean = (v) => String(v ?? "").trim();

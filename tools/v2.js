@@ -113,7 +113,7 @@
       });
 
       // ---- Formulário: referência por tipologia
-      var REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043" };
+      var REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043", T3: "YR00096" };
       var type = document.getElementById("type"), ref = document.getElementById("ref");
       function setRef() { ref.value = REFS[type.value] || ""; }
       type.addEventListener("change", setRef);
@@ -130,7 +130,7 @@
       });
       document.getElementById("campaign").value = q.get("utm_campaign") || "";
 
-      // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1 ou ?type=T2
+      // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1, ?type=T2 ou ?type=T3
       var typeParam = (q.get("type") || "").toUpperCase();
       if (REFS[typeParam]) {
         type.value = typeParam;
