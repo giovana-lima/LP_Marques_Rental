@@ -51,7 +51,7 @@ function leadOut(l, contacts) {
     id: l.id, created_at: l.created_at, date: lisbonDay(l.created_at),
     typology: d.typology || "", ref: REFS[d.typology] || "", language: d.language || "",
     within_budget: d.within_budget || "", move_in_timing: d.move_in_timing || "",
-    utm_source: d.utm_source || "", utm_medium: d.utm_medium || "", utm_campaign: d.utm_campaign || "",
+    campaign: d.campaign || "", utm_source: d.utm_source || "", utm_medium: d.utm_medium || "", utm_campaign: d.utm_campaign || "", utm_content: d.utm_content || "", utm_term: d.utm_term || "",
     source: l.source, inmovilla_status: l.status, inmovilla_error: l.error || "",
   };
   if (contacts) Object.assign(o, { name: d.name || "", email: d.email || "", phone: d.phone || "" });

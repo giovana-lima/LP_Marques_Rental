@@ -9,7 +9,7 @@ export const REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043", T3: "YR00096"
 
 // Campos do formulário que guardamos no registo (o resto é ignorado)
 export const FIELDS = ["name", "email", "phone", "typology", "within_budget", "move_in_timing", "language",
-  "property_ref", "campaign", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  "origin", "location", "source", "property_ref", "campaign", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
 
 const clean = (v) => String(v ?? "").trim();
 
