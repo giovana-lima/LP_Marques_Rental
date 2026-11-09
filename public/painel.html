@@ -64,6 +64,11 @@
   .grid2 .card { padding: 4px 0; }
   .grid2 h3 { font-size: 14px; margin: 10px 14px 4px; }
   .grid2 td:first-child { white-space: normal; }
+  .lf { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  .lf label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+  .lf select, .lf input { font: inherit; font-size: 14px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; min-width: 0; }
+  .lcount { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin: 4px 0 10px; }
+  .lcount b { font-size: 22px; font-variant-numeric: tabular-nums; }
   .spark { display: inline-block; height: 8px; background: var(--gold); border-radius: 2px; vertical-align: middle; margin-right: 6px; }
   .help { font-size: 13px; color: var(--muted); max-width: 70ch; }
   .hidden { display: none !important; }
@@ -124,8 +129,19 @@
       <button id="resendSel" disabled></button>
       <label class="small" style="cursor:pointer"><input type="file" id="csv" accept=".csv,text/csv" class="hidden"><span style="display:inline-block;border:1px solid var(--navy);border-radius:6px;padding:8px 14px" data-t="importCsv"></span></label>
     </div>
+    <div class="lf" id="lfilters">
+      <label><span data-t="thCampaign"></span><select data-k="campaign"></select></label>
+      <label>UTM Source<select data-k="utm_source"></select></label>
+      <label>UTM Medium<select data-k="utm_medium"></select></label>
+      <label>UTM Campaign<select data-k="utm_campaign"></select></label>
+      <label><span data-t="thType"></span><select data-k="typology"></select></label>
+      <label><span data-t="thLang"></span><select data-k="language"></select></label>
+      <label><span data-t="from"></span><input type="date" id="lfFrom"></label>
+      <label><span data-t="to"></span><input type="date" id="lfTo"></label>
+    </div>
+    <div class="lcount"><b id="lcN">0</b><span id="lcTxt" class="muted"></span><span style="flex:1"></span><button class="line small" id="lfClear" data-t="clear"></button><button class="line small" id="lfCsv" data-t="exportCsv"></button></div>
     <div class="card"><div class="tablewrap"><table>
-      <thead><tr><th><input type="checkbox" id="all"></th><th data-t="thDate"></th><th data-t="thName"></th><th data-t="thContact"></th><th data-t="thType"></th><th data-t="thLang"></th><th data-t="thSource"></th><th data-t="thInm"></th><th></th></tr></thead>
+      <thead><tr><th><input type="checkbox" id="all"></th><th data-t="thDate"></th><th data-t="thName"></th><th data-t="thContact"></th><th data-t="thType"></th><th data-t="thLang"></th><th data-t="thCampaign"></th><th>UTM Source</th><th>UTM Medium</th><th>UTM Campaign</th><th data-t="thInm"></th><th></th></tr></thead>
       <tbody id="leads"></tbody>
     </table></div></div>
     <p class="help" data-th="importHelp"></p>
@@ -152,7 +168,7 @@
       today: "Hoje", d7: "Últimos 7 dias", d30: "Últimos 30 dias", d90: "Últimos 90 dias", refresh: "Atualizar", logout: "Sair",
       fAll: "Todos", fFailed: "Falhados", fImported: "Importados", fSent: "Enviados",
       resendSel: "Reenviar selecionados", importCsv: "Importar CSV do Netlify",
-      thDate: "Data", thName: "Nome", thContact: "Email / telefone", thType: "Tipologia", thLang: "Idioma", thSource: "Origem", thInm: "Envio Inmovilla",
+      thDate: "Data", thName: "Nome", thContact: "Email / telefone", thType: "Tipologia", thLang: "Idioma", thSource: "Origem", thInm: "Envio Inmovilla", thCampaign: "Campanha", from: "De", to: "Até", clear: "Limpar filtros", exportCsv: "Exportar CSV", any: "Todos", empty: "(vazio)", leadsWord: function (n) { return n === 1 ? "lead" : "leads"; },
       importHelp: '"Importar CSV do Netlify" serve para recuperar leads antigos: no Netlify, abra Forms › lead › <b>Download as CSV</b> e escolha o ficheiro aqui. Os leads entram como "Importado" e só vão para o Inmovilla quando os selecionar e clicar em "Reenviar".',
       hDaily: "Atividade por dia", thDay: "Dia", thThanks: "Página de obrigado", thLeads: "Leads registados", thFailed: "Emails falhados",
       hClicks: "Detalhe dos cliques", anonHelp: "As visitas e os cliques são contados de forma anónima (sem cookies e sem dados pessoais). Os contadores começaram a 9 de novembro de 2026.",
@@ -182,7 +198,7 @@
       today: "Today", d7: "Last 7 days", d30: "Last 30 days", d90: "Last 90 days", refresh: "Refresh", logout: "Sign out",
       fAll: "All", fFailed: "Failed", fImported: "Imported", fSent: "Sent",
       resendSel: "Resend selected", importCsv: "Import CSV from Netlify",
-      thDate: "Date", thName: "Name", thContact: "Email / phone", thType: "Type", thLang: "Language", thSource: "Source", thInm: "Sent to Inmovilla",
+      thDate: "Date", thName: "Name", thContact: "Email / phone", thType: "Type", thLang: "Language", thSource: "Source", thInm: "Sent to Inmovilla", thCampaign: "Campaign", from: "From", to: "To", clear: "Clear filters", exportCsv: "Export CSV", any: "All", empty: "(empty)", leadsWord: function (n) { return n === 1 ? "lead" : "leads"; },
       importHelp: '"Import CSV from Netlify" recovers older leads: in Netlify, open Forms › lead › <b>Download as CSV</b> and choose the file here. Leads come in as "Imported" and only go to Inmovilla when you select them and click "Resend".',
       hDaily: "Activity by day", thDay: "Day", thThanks: "Thank-you page", thLeads: "Leads recorded", thFailed: "Failed emails",
       hClicks: "Click details", anonHelp: "Visits and clicks are counted anonymously (no cookies, no personal data). Counting started on 9 November 2026.",
@@ -326,15 +342,76 @@
       block(t("bSource"), ev("pv", [["google", t("sGoogle")], ["ext", t("sExt")], ["direct", t("sDirect")]]));
   }
 
+  var LF = { campaign: "", utm_source: "", utm_medium: "", utm_campaign: "", typology: "", language: "" };
+  var EMPTY = "\u0000";
+  function leadVal(l, k) { return String((l.data || {})[k] || ""); }
+  function filteredLeads(skipKey) {
+    var from = $("lfFrom").value, to = $("lfTo").value;
+    return data.leads.filter(function (l) {
+      if (filter !== "all" && l.status !== filter) return false;
+      var d = day(l.created_at);
+      if (from && d < from) return false;
+      if (to && d > to) return false;
+      for (var k in LF) {
+        if (k === skipKey || !LF[k]) continue;
+        var v = leadVal(l, k);
+        if (LF[k] === EMPTY ? v !== "" : v !== LF[k]) return false;
+      }
+      return true;
+    });
+  }
+  function fillSelects() {
+    document.querySelectorAll("#lfilters select").forEach(function (sel) {
+      var k = sel.getAttribute("data-k"), counts = {};
+      filteredLeads(k).forEach(function (l) { var v = leadVal(l, k); counts[v] = (counts[v] || 0) + 1; });
+      var keys = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a] || a.localeCompare(b); });
+      if (LF[k] && !(LF[k] === EMPTY ? "" in counts : LF[k] in counts)) keys.push(LF[k] === EMPTY ? "" : LF[k]);
+      sel.innerHTML = '<option value="">' + t("any") + "</option>" + keys.map(function (v) {
+        var val = v === "" ? EMPTY : v;
+        return '<option value="' + esc(val) + '"' + (LF[k] === val ? " selected" : "") + ">" + esc(v === "" ? t("empty") : (k === "language" ? v.toUpperCase() : v)) + " (" + (counts[v] || 0) + ")</option>";
+      }).join("");
+    });
+  }
+
   function renderLeads() {
-    var rows = data.leads.filter(function (l) { return filter === "all" || l.status === filter; });
+    fillSelects();
+    var rows = filteredLeads();
+    var st = { sent: 0, failed: 0, imported: 0 };
+    rows.forEach(function (l) { st[l.status] = (st[l.status] || 0) + 1; });
+    $("lcN").textContent = rows.length;
+    $("lcTxt").textContent = t("leadsWord")(rows.length) + " · " + t("sent") + " " + st.sent + " · " + t("failed") + " " + st.failed + " · " + t("imported") + " " + st.imported;
+    var cell = function (v) { return "<td>" + (v ? esc(v) : '<span class="muted">—</span>') + "</td>"; };
     $("leads").innerHTML = rows.length ? rows.map(function (l) {
-      var d = l.data || {}, st = l.status, can = st !== "sent";
-      var badge = st === "sent" ? '<span class="badge b-sent">' + t("sent") + "</span>" : st === "failed" ? '<span class="badge b-failed">' + t("failed") + "</span>" : '<span class="badge b-imported">' + t("imported") + "</span>";
-      return "<tr><td>" + (can ? '<input type="checkbox" data-id="' + esc(l.id) + '"' + (selected[l.id] ? " checked" : "") + ' aria-label="' + t("select") + '">' : "") + "</td><td>" + esc(fmt(l.created_at)) + "</td><td>" + esc(d.name) + "</td><td>" + esc(d.email) + '<br><span class="muted small">' + esc(d.phone) + "</span></td><td>" + esc(d.typology) + "</td><td>" + esc((d.language || "").toUpperCase()) + "</td><td>" + esc(d.utm_source || "—") + "</td><td>" + badge + (st === "failed" ? '<span class="errtxt">' + esc(l.error) + "</span>" : "") + "</td><td>" + (can ? '<button class="line small" data-resend="' + esc(l.id) + '">' + t("resend") + "</button>" : "") + "</td></tr>";
-    }).join("") : '<tr><td colspan="9" class="muted">' + t("noLeads") + (filter !== "all" ? t("inFilter") : "") + ".</td></tr>";
+      var d = l.data || {}, s2 = l.status, can = s2 !== "sent";
+      var badge = s2 === "sent" ? '<span class="badge b-sent">' + t("sent") + "</span>" : s2 === "failed" ? '<span class="badge b-failed">' + t("failed") + "</span>" : '<span class="badge b-imported">' + t("imported") + "</span>";
+      return "<tr><td>" + (can ? '<input type="checkbox" data-id="' + esc(l.id) + '"' + (selected[l.id] ? " checked" : "") + ' aria-label="' + t("select") + '">' : "") + "</td><td>" + esc(fmt(l.created_at)) + "</td><td>" + esc(d.name) + "</td><td>" + esc(d.email) + '<br><span class="muted small">' + esc(d.phone) + "</span></td><td>" + esc(d.typology) + "</td><td>" + esc((d.language || "").toUpperCase()) + "</td>" +
+        cell(d.campaign) + cell(d.utm_source) + cell(d.utm_medium) + cell(d.utm_campaign) +
+        "<td>" + badge + (s2 === "failed" ? '<span class="errtxt">' + esc(l.error) + "</span>" : "") + "</td><td>" + (can ? '<button class="line small" data-resend="' + esc(l.id) + '">' + t("resend") + "</button>" : "") + "</td></tr>";
+    }).join("") : '<tr><td colspan="12" class="muted">' + t("noLeads") + t("inFilter") + ".</td></tr>";
     updateSel();
   }
+
+  $("lfilters").addEventListener("change", function (e) {
+    var k = e.target.getAttribute("data-k"); if (k) LF[k] = e.target.value;
+    renderLeads();
+  });
+  $("lfClear").addEventListener("click", function () {
+    for (var k in LF) LF[k] = ""; $("lfFrom").value = ""; $("lfTo").value = ""; filter = "all";
+    document.querySelectorAll("#filters button").forEach(function (x) { x.setAttribute("aria-pressed", x.getAttribute("data-f") === "all" ? "true" : "false"); });
+    renderLeads();
+  });
+  $("lfCsv").addEventListener("click", function () {
+    var cols = ["created_at", "name", "email", "phone", "typology", "language", "campaign", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "within_budget", "move_in_timing", "status", "error"];
+    var q = function (v) { v = String(v == null ? "" : v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var lines = [cols.join(",")].concat(filteredLeads().map(function (l) {
+      var d = l.data || {};
+      return cols.map(function (c) { return q(c === "created_at" ? fmt(l.created_at) : c === "status" ? l.status : c === "error" ? l.error : d[c]); }).join(",");
+    }));
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" }));
+    a.download = "leads-marques-" + new Date().toISOString().slice(0, 10) + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+  });
 
   function updateSel() { var n = Object.keys(selected).length; $("resendSel").disabled = !n; $("resendSel").textContent = t("resendSel") + (n ? " (" + n + ")" : ""); }
 
