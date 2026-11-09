@@ -63,22 +63,30 @@
   .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
   .grid2 .card { padding: 4px 0; }
   .grid2 h3 { font-size: 14px; margin: 10px 14px 4px; }
+  .grid2 td:first-child { white-space: normal; }
   .spark { display: inline-block; height: 8px; background: var(--gold); border-radius: 2px; vertical-align: middle; margin-right: 6px; }
   .help { font-size: 13px; color: var(--muted); max-width: 70ch; }
   .hidden { display: none !important; }
   input[type=checkbox] { width: 16px; height: 16px; }
   @media (max-width: 600px) { .kpi .v { font-size: 24px; } }
+  .langs { display: inline-flex; border: 1px solid rgba(255,255,255,.5); border-radius: 6px; overflow: hidden; }
+  .langs button { border: 0; border-radius: 0; background: transparent; color: #fff; padding: 7px 10px; font-size: 13px; }
+  .langs button[aria-pressed=true] { background: var(--gold); color: var(--navy); }
+  .login .langs { border-color: var(--line); float: right; }
+  .login .langs button { color: var(--muted); }
+  .login .langs button[aria-pressed=true] { color: var(--navy); }
 </style>
 </head>
 <body>
 
 <section id="login" class="login">
-  <h1>Painel Marquês</h1>
-  <p class="muted small">Leads, envios para o Inmovilla e cliques das landing pages.</p>
+  <div class="langs" role="group" aria-label="Language"><button data-lang="pt">PT</button><button data-lang="en">EN</button></div>
+  <h1 data-t="title">Painel Marquês</h1>
+  <p class="muted small" data-t="loginSub"></p>
   <form id="lf">
-    <label for="pw" class="small">Senha</label>
+    <label for="pw" class="small" data-t="password"></label>
     <input id="pw" type="password" autocomplete="current-password" required>
-    <button type="submit">Entrar</button>
+    <button type="submit" data-t="enter"></button>
     <p class="err" id="lerr"></p>
   </form>
 </section>
@@ -86,15 +94,16 @@
 <div id="app" class="hidden">
   <header>
     <div class="hin">
-      <h1>Painel <span>· Jardins do Marquês</span></h1>
-      <select id="days" aria-label="Período">
-        <option value="1">Hoje</option>
-        <option value="7" selected>Últimos 7 dias</option>
-        <option value="30">Últimos 30 dias</option>
-        <option value="90">Últimos 90 dias</option>
+      <h1><b data-t="panel" style="font-weight:600"></b> <span>· Jardins do Marquês</span></h1>
+      <select id="days" aria-label="Period">
+        <option value="1" data-t="today"></option>
+        <option value="7" data-t="d7" selected></option>
+        <option value="30" data-t="d30"></option>
+        <option value="90" data-t="d90"></option>
       </select>
-      <button class="line" id="refresh">Atualizar</button>
-      <button class="line" id="logout">Sair</button>
+      <button class="line" id="refresh" data-t="refresh"></button>
+      <div class="langs" role="group" aria-label="Language"><button data-lang="pt">PT</button><button data-lang="en">EN</button></div>
+      <button class="line" id="logout" data-t="logout"></button>
     </div>
   </header>
   <main>
@@ -106,84 +115,156 @@
     <h2>Leads</h2>
     <div class="bar">
       <div class="filters bar" style="margin:0" id="filters">
-        <button data-f="all" aria-pressed="true">Todos</button>
-        <button data-f="failed" aria-pressed="false">Falhados</button>
-        <button data-f="imported" aria-pressed="false">Importados</button>
-        <button data-f="sent" aria-pressed="false">Enviados</button>
+        <button data-f="all" aria-pressed="true" data-t="fAll"></button>
+        <button data-f="failed" aria-pressed="false" data-t="fFailed"></button>
+        <button data-f="imported" aria-pressed="false" data-t="fImported"></button>
+        <button data-f="sent" aria-pressed="false" data-t="fSent"></button>
       </div>
       <span style="flex:1"></span>
-      <button id="resendSel" disabled>Reenviar selecionados</button>
-      <label class="small" style="cursor:pointer"><input type="file" id="csv" accept=".csv,text/csv" class="hidden"><span class="line" style="display:inline-block;border:1px solid var(--navy);border-radius:6px;padding:8px 14px">Importar CSV do Netlify</span></label>
+      <button id="resendSel" disabled></button>
+      <label class="small" style="cursor:pointer"><input type="file" id="csv" accept=".csv,text/csv" class="hidden"><span style="display:inline-block;border:1px solid var(--navy);border-radius:6px;padding:8px 14px" data-t="importCsv"></span></label>
     </div>
     <div class="card"><div class="tablewrap"><table>
-      <thead><tr><th><input type="checkbox" id="all" aria-label="Selecionar todos"></th><th>Data</th><th>Nome</th><th>Email / telefone</th><th>Tipologia</th><th>Idioma</th><th>Origem</th><th>Envio Inmovilla</th><th></th></tr></thead>
+      <thead><tr><th><input type="checkbox" id="all"></th><th data-t="thDate"></th><th data-t="thName"></th><th data-t="thContact"></th><th data-t="thType"></th><th data-t="thLang"></th><th data-t="thSource"></th><th data-t="thInm"></th><th></th></tr></thead>
       <tbody id="leads"></tbody>
     </table></div></div>
-    <p class="help">"Importar CSV do Netlify" serve para recuperar leads antigos: no Netlify, abra Forms › lead › <b>Download as CSV</b> e escolha o ficheiro aqui. Os leads entram como "Importado" e só vão para o Inmovilla quando os selecionar e clicar em "Reenviar".</p>
+    <p class="help" data-th="importHelp"></p>
 
-    <h2>Atividade por dia</h2>
+    <h2 data-t="hDaily"></h2>
     <div class="card"><div class="tablewrap"><table>
-      <thead><tr><th>Dia</th><th class="num">Visitas</th><th class="num">Cliques "Saiba mais"</th><th class="num">Formulário começado</th><th class="num">Formulário enviado</th><th class="num">Página de obrigado</th><th class="num">Leads registados</th><th class="num">Emails falhados</th></tr></thead>
+      <thead><tr><th data-t="thDay"></th><th class="num" data-t="kVisits"></th><th class="num" data-t="kCta"></th><th class="num" data-t="kStart"></th><th class="num" data-t="kSent"></th><th class="num" data-t="thThanks"></th><th class="num" data-t="thLeads"></th><th class="num" data-t="thFailed"></th></tr></thead>
       <tbody id="daily"></tbody>
     </table></div></div>
 
-    <h2>Detalhe dos cliques</h2>
+    <h2 data-t="hClicks"></h2>
     <div class="grid2" id="breakdown"></div>
-    <p class="help">As visitas e os cliques são contados de forma anónima (sem cookies e sem dados pessoais). Os contadores começaram a 9 de novembro de 2026.</p>
+    <p class="help" data-t="anonHelp"></p>
   </main>
 </div>
 
 <script>
 (function () {
+  var I18N = {
+    pt: {
+      title: "Painel Marquês", panel: "Painel", loginSub: "Leads, envios para o Inmovilla e cliques das landing pages.",
+      password: "Senha", enter: "Entrar", wrongPw: "Senha incorreta.", noPw: "A senha do painel (PAINEL_PASSWORD) não está configurada no Netlify.",
+      loadErr: "Não foi possível carregar o painel: ",
+      today: "Hoje", d7: "Últimos 7 dias", d30: "Últimos 30 dias", d90: "Últimos 90 dias", refresh: "Atualizar", logout: "Sair",
+      fAll: "Todos", fFailed: "Falhados", fImported: "Importados", fSent: "Enviados",
+      resendSel: "Reenviar selecionados", importCsv: "Importar CSV do Netlify",
+      thDate: "Data", thName: "Nome", thContact: "Email / telefone", thType: "Tipologia", thLang: "Idioma", thSource: "Origem", thInm: "Envio Inmovilla",
+      importHelp: '"Importar CSV do Netlify" serve para recuperar leads antigos: no Netlify, abra Forms › lead › <b>Download as CSV</b> e escolha o ficheiro aqui. Os leads entram como "Importado" e só vão para o Inmovilla quando os selecionar e clicar em "Reenviar".',
+      hDaily: "Atividade por dia", thDay: "Dia", thThanks: "Página de obrigado", thLeads: "Leads registados", thFailed: "Emails falhados",
+      hClicks: "Detalhe dos cliques", anonHelp: "As visitas e os cliques são contados de forma anónima (sem cookies e sem dados pessoais). Os contadores começaram a 9 de novembro de 2026.",
+      kVisits: "Visitas", kCta: 'Cliques "Saiba mais"', kStart: "Formulário começado", kSent: "Formulário enviado", kInm: "Enviados ao Inmovilla", kFail: "Envios falhados",
+      ofVisits: "% das visitas", inPeriod: "leads registados neste período", seeBelow: "ver lista abaixo", none: "nenhum",
+      failedBanner: function (n) { return n + (n > 1 ? " leads não chegaram" : " lead não chegou") + " ao Inmovilla."; }, lastErr: "Último erro: ", resendFailed: "Reenviar falhados",
+      allOk: "Envios em dia.", lastSent: "Último lead enviado para o Inmovilla: ",
+      importedBanner: function (n) { return n + " lead(s) importado(s) ainda não foram enviados para o Inmovilla."; },
+      smtpIdle: "Ligação ao Gmail (conta que envia os leads): por testar.", smtpTest: "Testar ligação", smtpTesting: "A testar…",
+      smtpOk: "<b>Ligação ao Gmail: OK.</b> Os leads novos vão ser enviados.", smtpBad: "<b>Ligação ao Gmail falhou:</b> ", smtpFix: ". Verifique a senha de app em SMTP_PASS no Netlify.",
+      mismatch: function (a, b) { return "O site enviou " + a + " formulário(s) neste período, mas só " + b + " chegaram à função de envio. A diferença costuma ser formulários marcados como spam pelo Netlify (Forms › lead › Spam submissions)."; },
+      updated: "Atualizado às ", noLeads: "Sem leads registados", inFilter: " neste filtro",
+      sent: "Enviado", failed: "Falhou", imported: "Importado", resend: "Reenviar", select: "Selecionar", selectAll: "Selecionar todos",
+      sending: "A enviar… ", resendDone: function (ok, fail, err) { return ok + " enviado(s) para o Inmovilla" + (fail ? ", " + fail + " falharam.\n" + err : "."); },
+      error: "Erro: ", csvEmpty: "O ficheiro está vazio.", csvCols: "Não encontrei as colunas name / email no ficheiro.",
+      csvConfirm: function (n) { return "Importar " + n + " lead(s)? Não são enviados para o Inmovilla até os reenviar."; },
+      csvDone: function (a, s) { return a + " importado(s), " + s + " já existiam ou foram ignorados."; }, csvErr: "Erro na importação: ",
+      bWhere: 'Onde clicaram em "Saiba mais"', bTabs: "Separadores das tipologias", bPlans: "Plantas abertas", bByType: "Formulários enviados por tipologia", bOther: "Outros", bSource: "Origem das visitas",
+      wHeader: "Topo da página", wMenu: "Menu", wHero: "Início (hero)", wTab: "Separador ",
+      oGallery: "Fotos da galeria abertas", oTel: "Cliques no telefone", oLang: "Mudança de idioma", oPhone: "Telefone inválido no formulário", oErr: "Erro ao enviar o formulário",
+      sGoogle: "Google Ads", sExt: "Outros sites", sDirect: "Direto / sem origem", studio: "Estúdio", locale: "pt-PT"
+    },
+    en: {
+      title: "Marquês Dashboard", panel: "Dashboard", loginSub: "Leads, delivery to Inmovilla and landing page clicks.",
+      password: "Password", enter: "Sign in", wrongPw: "Wrong password.", noPw: "The dashboard password (PAINEL_PASSWORD) is not set in Netlify.",
+      loadErr: "Could not load the dashboard: ",
+      today: "Today", d7: "Last 7 days", d30: "Last 30 days", d90: "Last 90 days", refresh: "Refresh", logout: "Sign out",
+      fAll: "All", fFailed: "Failed", fImported: "Imported", fSent: "Sent",
+      resendSel: "Resend selected", importCsv: "Import CSV from Netlify",
+      thDate: "Date", thName: "Name", thContact: "Email / phone", thType: "Type", thLang: "Language", thSource: "Source", thInm: "Sent to Inmovilla",
+      importHelp: '"Import CSV from Netlify" recovers older leads: in Netlify, open Forms › lead › <b>Download as CSV</b> and choose the file here. Leads come in as "Imported" and only go to Inmovilla when you select them and click "Resend".',
+      hDaily: "Activity by day", thDay: "Day", thThanks: "Thank-you page", thLeads: "Leads recorded", thFailed: "Failed emails",
+      hClicks: "Click details", anonHelp: "Visits and clicks are counted anonymously (no cookies, no personal data). Counting started on 9 November 2026.",
+      kVisits: "Visits", kCta: '"Learn more" clicks', kStart: "Form started", kSent: "Form sent", kInm: "Sent to Inmovilla", kFail: "Failed deliveries",
+      ofVisits: "% of visits", inPeriod: "leads recorded in this period", seeBelow: "see list below", none: "none",
+      failedBanner: function (n) { return n + (n > 1 ? " leads did not reach" : " lead did not reach") + " Inmovilla."; }, lastErr: "Last error: ", resendFailed: "Resend failed",
+      allOk: "Deliveries up to date.", lastSent: "Last lead sent to Inmovilla: ",
+      importedBanner: function (n) { return n + " imported lead(s) have not been sent to Inmovilla yet."; },
+      smtpIdle: "Gmail connection (account that sends the leads): not tested.", smtpTest: "Test connection", smtpTesting: "Testing…",
+      smtpOk: "<b>Gmail connection: OK.</b> New leads will be sent.", smtpBad: "<b>Gmail connection failed:</b> ", smtpFix: ". Check the app password in SMTP_PASS in Netlify.",
+      mismatch: function (a, b) { return "The site sent " + a + " form(s) in this period, but only " + b + " reached the sending function. The gap is usually forms flagged as spam by Netlify (Forms › lead › Spam submissions)."; },
+      updated: "Updated at ", noLeads: "No leads recorded", inFilter: " for this filter",
+      sent: "Sent", failed: "Failed", imported: "Imported", resend: "Resend", select: "Select", selectAll: "Select all",
+      sending: "Sending… ", resendDone: function (ok, fail, err) { return ok + " sent to Inmovilla" + (fail ? ", " + fail + " failed.\n" + err : "."); },
+      error: "Error: ", csvEmpty: "The file is empty.", csvCols: "Could not find the name / email columns in the file.",
+      csvConfirm: function (n) { return "Import " + n + " lead(s)? They are not sent to Inmovilla until you resend them."; },
+      csvDone: function (a, s) { return a + " imported, " + s + " already existed or were skipped."; }, csvErr: "Import error: ",
+      bWhere: 'Where people clicked "Learn more"', bTabs: "Apartment type tabs", bPlans: "Floor plans opened", bByType: "Forms sent by type", bOther: "Other", bSource: "Visit sources",
+      wHeader: "Top of page", wMenu: "Menu", wHero: "Hero", wTab: "Tab ",
+      oGallery: "Gallery photos opened", oTel: "Phone clicks", oLang: "Language switch", oPhone: "Invalid phone in form", oErr: "Form sending error",
+      sGoogle: "Google Ads", sExt: "Other sites", sDirect: "Direct / unknown", studio: "Studio", locale: "en-GB"
+    }
+  };
+  var LANG = "pt";
+  try { LANG = localStorage.getItem("painelLang") || ((navigator.language || "").indexOf("pt") === 0 ? "pt" : "en"); } catch (e) {}
+  if (!I18N[LANG]) LANG = "pt";
+  var t = function (k) { return I18N[LANG][k]; };
+
   var KEY = "";
   try { KEY = sessionStorage.getItem("painelKey") || ""; } catch (e) {}
   var data = null, filter = "all", selected = {};
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
-  var fmt = function (iso) { try { return new Date(iso).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon", day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return iso; } };
+  var fmt = function (iso) { try { return new Date(iso).toLocaleString(t("locale"), { timeZone: "Europe/Lisbon", day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return iso; } };
   var day = function (iso) { try { return new Date(iso).toLocaleDateString("sv-SE", { timeZone: "Europe/Lisbon" }); } catch (e) { return String(iso).slice(0, 10); } };
+
+  function applyLang() {
+    document.documentElement.lang = LANG === "pt" ? "pt-PT" : "en";
+    document.title = t("title");
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
+    document.querySelectorAll("[data-th]").forEach(function (el) { el.innerHTML = t(el.getAttribute("data-th")); });
+    document.querySelectorAll("[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-lang") === LANG ? "true" : "false"); });
+    $("all").setAttribute("aria-label", t("selectAll"));
+    updateSel();
+    if (data) render();
+  }
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.addEventListener("click", function () { LANG = b.getAttribute("data-lang"); try { localStorage.setItem("painelLang", LANG); } catch (e) {} applyLang(); });
+  });
 
   function api(method, body) {
     var url = "/api/painel" + (method === "GET" ? "?days=" + $("days").value : "");
     return fetch(url, { method: method, headers: { "x-painel-key": KEY, "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw Object.assign(new Error(j.error || ("Erro " + r.status)), { status: r.status }); return j; }); });
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw Object.assign(new Error(r.status === 401 ? t("wrongPw") : r.status === 503 ? t("noPw") : (j.error || ("HTTP " + r.status))), { status: r.status });
+        return j; }); });
   }
 
-  function showLogin(msg) {
-    $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("lerr").textContent = msg || "";
-  }
+  function showLogin(msg) { $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("lerr").textContent = msg || ""; }
   function load() {
     $("refresh").disabled = true;
     return api("GET").then(function (j) {
       data = j; $("login").classList.add("hidden"); $("app").classList.remove("hidden"); render();
     }).catch(function (e) {
       if (e.status === 401 || e.status === 503) { try { sessionStorage.removeItem("painelKey"); } catch (x) {} showLogin(e.message); }
-      else alert("Não foi possível carregar o painel: " + e.message);
+      else alert(t("loadErr") + e.message);
     }).finally(function () { $("refresh").disabled = false; });
   }
 
-  $("lf").addEventListener("submit", function (e) {
-    e.preventDefault(); KEY = $("pw").value; try { sessionStorage.setItem("painelKey", KEY); } catch (x) {} load();
-  });
+  $("lf").addEventListener("submit", function (e) { e.preventDefault(); KEY = $("pw").value; try { sessionStorage.setItem("painelKey", KEY); } catch (x) {} load(); });
   $("logout").addEventListener("click", function () { KEY = ""; try { sessionStorage.removeItem("painelKey"); } catch (x) {} $("pw").value = ""; showLogin(""); });
   $("refresh").addEventListener("click", load);
   $("days").addEventListener("change", load);
 
-  // ---- soma de eventos: counts["evento|lingua|detalhe"]
   function sum(ev, lang, detail, days) {
-    var t = 0;
+    var n = 0;
     (days || data.events).forEach(function (d) {
-      for (var k in d.counts) {
-        var p = k.split("|");
-        if (p[0] === ev && (!lang || p[1] === lang) && (!detail || p[2] === detail)) t += d.counts[k];
-      }
+      for (var k in d.counts) { var p = k.split("|"); if (p[0] === ev && (!lang || p[1] === lang) && (!detail || p[2] === detail)) n += d.counts[k]; }
     });
-    return t;
+    return n;
   }
-  function inPeriod(rec) {
-    var first = data.events.length ? data.events[data.events.length - 1].day : "";
-    return day(rec.created_at) >= first;
-  }
+  function inPeriod(rec) { var first = data.events.length ? data.events[data.events.length - 1].day : ""; return day(rec.created_at) >= first; }
 
   function render() {
     var leads = data.leads, period = leads.filter(inPeriod);
@@ -192,74 +273,70 @@
     var sentP = period.filter(function (l) { return l.status === "sent"; }).length;
     var failedP = period.filter(function (l) { return l.status === "failed"; }).length;
 
-    // Avisos
     var b = "";
-    if (failedAll.length) b += '<div class="banner bad"><p><b>' + failedAll.length + ' lead' + (failedAll.length > 1 ? "s" : "") + ' não chegou' + (failedAll.length > 1 ? "aram" : "") + ' ao Inmovilla.</b> Último erro: ' + esc(failedAll[0].error || "") + '</p><button id="resendFailed">Reenviar falhados</button></div>';
-    else if (leads.length) b += '<div class="banner ok"><p><b>Envios em dia.</b> Último lead enviado para o Inmovilla: ' + esc(fmt((leads.find(function (l) { return l.status === "sent"; }) || {}).created_at || "")) + '</p></div>';
-    if (importedAll.length) b += '<div class="banner warn"><p>' + importedAll.length + ' lead(s) importado(s) ainda não foram enviados para o Inmovilla.</p></div>';
-    b += '<div class="banner warn" id="smtpBox" style="background:var(--info-bg);color:var(--navy)"><p id="smtpMsg">Ligação ao Gmail (conta que envia os leads): por testar.</p><button class="line" id="smtpBtn">Testar ligação</button></div>';
+    if (failedAll.length) b += '<div class="banner bad"><p><b>' + t("failedBanner")(failedAll.length) + "</b> " + t("lastErr") + esc(failedAll[0].error || "") + '</p><button id="resendFailed">' + t("resendFailed") + "</button></div>";
+    else if (leads.length) b += '<div class="banner ok"><p><b>' + t("allOk") + "</b> " + t("lastSent") + esc(fmt((leads.find(function (l) { return l.status === "sent"; }) || {}).created_at || "")) + "</p></div>";
+    if (importedAll.length) b += '<div class="banner warn"><p>' + t("importedBanner")(importedAll.length) + "</p></div>";
+    b += '<div class="banner" id="smtpBox" style="background:var(--info-bg);color:var(--navy)"><p id="smtpMsg">' + t("smtpIdle") + '</p><button class="line" id="smtpBtn">' + t("smtpTest") + "</button></div>";
     var subOk = sum("submit_ok"), recP = period.filter(function (l) { return l.source === "site"; }).length;
-    if (subOk > recP) b += '<div class="banner warn"><p>O site enviou ' + subOk + ' formulário(s) neste período, mas só ' + recP + ' chegaram à função de envio. A diferença costuma ser formulários marcados como spam pelo Netlify (Forms › lead › Spam submissions).</p></div>';
+    if (subOk > recP) b += '<div class="banner warn"><p>' + t("mismatch")(subOk, recP) + "</p></div>";
     $("banners").innerHTML = b;
     if ($("resendFailed")) $("resendFailed").addEventListener("click", function () { resend(failedAll.map(function (l) { return l.id; }), this); });
     $("smtpBtn").addEventListener("click", function () {
-      var btn = this; btn.disabled = true; $("smtpMsg").textContent = "A testar…";
+      var btn = this; btn.disabled = true; $("smtpMsg").textContent = t("smtpTesting");
       api("POST", { action: "smtp" }).then(function (j) {
         $("smtpBox").style.background = j.ok ? "var(--ok-bg)" : "var(--bad-bg)"; $("smtpBox").style.color = j.ok ? "var(--ok)" : "var(--bad)";
-        $("smtpMsg").innerHTML = j.ok ? "<b>Ligação ao Gmail: OK.</b> Os leads novos vão ser enviados." : "<b>Ligação ao Gmail falhou:</b> " + esc(String(j.error).replace(/\.+$/, "")) + ". Verifique a senha de app em SMTP_PASS no Netlify.";
-      }).catch(function (e) { $("smtpMsg").textContent = "Erro: " + e.message; }).finally(function () { btn.disabled = false; });
+        $("smtpMsg").innerHTML = j.ok ? t("smtpOk") : t("smtpBad") + esc(String(j.error).replace(/\.+$/, "")) + t("smtpFix");
+      }).catch(function (e) { $("smtpMsg").textContent = t("error") + e.message; }).finally(function () { btn.disabled = false; });
     });
 
-    // KPIs
     var pv = sum("pv"), cta = sum("cta"), fs = sum("form_start"), so = sum("submit_ok");
+    var pct = function (a) { return pv ? (a / pv * 100).toFixed(1).replace(".", LANG === "pt" ? "," : ".") + t("ofVisits") : ""; };
     var k = [
-      ["Visitas", pv, "PT " + sum("pv", "pt") + " · EN " + sum("pv", "en")],
-      ['Cliques "Saiba mais"', cta, "PT " + sum("cta", "pt") + " · EN " + sum("cta", "en")],
-      ["Formulário começado", fs, pv ? Math.round(fs / pv * 100) + "% das visitas" : ""],
-      ["Formulário enviado", so, pv ? (so / pv * 100).toFixed(1).replace(".", ",") + "% das visitas" : ""],
-      ["Enviados ao Inmovilla", sentP, "leads registados neste período"],
-      ["Envios falhados", failedP, failedP ? "ver lista abaixo" : "nenhum", failedP > 0]
+      [t("kVisits"), pv, "PT " + sum("pv", "pt") + " · EN " + sum("pv", "en")],
+      [t("kCta"), cta, "PT " + sum("cta", "pt") + " · EN " + sum("cta", "en")],
+      [t("kStart"), fs, pct(fs)],
+      [t("kSent"), so, pct(so)],
+      [t("kInm"), sentP, t("inPeriod")],
+      [t("kFail"), failedP, failedP ? t("seeBelow") : t("none"), failedP > 0]
     ];
-    $("kpis").innerHTML = k.map(function (x) { return '<div class="kpi' + (x[3] ? " bad" : "") + '"><div class="l">' + x[0] + '</div><div class="v">' + x[1] + '</div><div class="s">' + esc(x[2]) + '</div></div>'; }).join("");
-    $("updated").textContent = "Atualizado às " + fmt(data.now) + ".";
+    $("kpis").innerHTML = k.map(function (x) { return '<div class="kpi' + (x[3] ? " bad" : "") + '"><div class="l">' + esc(x[0]) + '</div><div class="v">' + x[1] + '</div><div class="s">' + esc(x[2]) + "</div></div>"; }).join("");
+    $("updated").textContent = t("updated") + fmt(data.now) + ".";
 
     renderLeads();
 
-    // Diário
     $("daily").innerHTML = data.events.map(function (d) {
       var one = [d], L = leads.filter(function (l) { return day(l.created_at) === d.day; });
       return "<tr><td>" + d.day.split("-").reverse().join("/") + "</td>" + [sum("pv", 0, 0, one), sum("cta", 0, 0, one), sum("form_start", 0, 0, one), sum("submit_ok", 0, 0, one), sum("thanks", 0, 0, one),
         L.filter(function (l) { return l.source === "site"; }).length, L.filter(function (l) { return l.status === "failed"; }).length].map(function (v) { return '<td class="num">' + v + "</td>"; }).join("") + "</tr>";
     }).join("");
 
-    // Detalhe
-    function block(title, ev, labels) {
-      var rows = labels.map(function (x) { return [x[1], sum(ev, 0, x[0])]; });
+    function block(title, rows) {
       var max = Math.max.apply(null, rows.map(function (r) { return r[1]; }).concat([1]));
-      return '<div class="card"><h3>' + title + '</h3><table><tbody>' + rows.map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td class="num"><span class="spark" style="width:' + Math.round(r[1] / max * 80) + 'px"></span>' + r[1] + '</td></tr>'; }).join("") + '</tbody></table></div>';
+      return '<div class="card"><h3>' + esc(title) + "</h3><table><tbody>" + rows.map(function (r) { return "<tr><td>" + esc(r[0]) + '</td><td class="num"><span class="spark" style="width:' + Math.round(r[1] / max * 56) + 'px"></span>' + r[1] + "</td></tr>"; }).join("") + "</tbody></table></div>";
     }
-    var T = [["T0", "T0 · Estúdio"], ["T1", "T1 · Duplex"], ["T2", "T2 · Duplex"], ["T3", "T3 · Duplex"]];
+    var ev = function (e, labels) { return labels.map(function (x) { return [x[1], sum(e, 0, x[0])]; }); };
+    var T = [["T0", "T0 · " + t("studio")], ["T1", "T1 · Duplex"], ["T2", "T2 · Duplex"], ["T3", "T3 · Duplex"]];
     $("breakdown").innerHTML =
-      block('Onde clicaram em "Saiba mais"', "cta", [["header", "Topo da página"], ["menu", "Menu"], ["hero", "Início (hero)"], ["T0", "Separador T0"], ["T1", "Separador T1"], ["T2", "Separador T2"], ["T3", "Separador T3"]]) +
-      block("Separadores das tipologias", "tab", T) +
-      block("Plantas abertas", "plan", T) +
-      block("Formulários enviados por tipologia", "submit_ok", T) +
-      block("Outros", "", []).replace("<tbody></tbody>", "<tbody>" + [["Fotos da galeria abertas", sum("gallery")], ["Cliques no telefone", sum("tel")], ["Mudança de idioma", sum("lang")], ["Telefone inválido no formulário", sum("phone_invalid")], ["Erro ao enviar o formulário", sum("submit_err")]].map(function (r) { return "<tr><td>" + r[0] + '</td><td class="num">' + r[1] + "</td></tr>"; }).join("") + "</tbody>") +
-      block("Origem das visitas", "pv", [["google", "Google Ads"], ["ext", "Outros sites"], ["direct", "Direto / sem origem"]]);
+      block(t("bWhere"), ev("cta", [["header", t("wHeader")], ["menu", t("wMenu")], ["hero", t("wHero")], ["T0", t("wTab") + "T0"], ["T1", t("wTab") + "T1"], ["T2", t("wTab") + "T2"], ["T3", t("wTab") + "T3"]])) +
+      block(t("bTabs"), ev("tab", T)) +
+      block(t("bPlans"), ev("plan", T)) +
+      block(t("bByType"), ev("submit_ok", T)) +
+      block(t("bOther"), [[t("oGallery"), sum("gallery")], [t("oTel"), sum("tel")], [t("oLang"), sum("lang")], [t("oPhone"), sum("phone_invalid")], [t("oErr"), sum("submit_err")]]) +
+      block(t("bSource"), ev("pv", [["google", t("sGoogle")], ["ext", t("sExt")], ["direct", t("sDirect")]]));
   }
 
   function renderLeads() {
     var rows = data.leads.filter(function (l) { return filter === "all" || l.status === filter; });
     $("leads").innerHTML = rows.length ? rows.map(function (l) {
-      var d = l.data || {}, st = l.status;
-      var badge = st === "sent" ? '<span class="badge b-sent">Enviado</span>' : st === "failed" ? '<span class="badge b-failed">Falhou</span>' : '<span class="badge b-imported">Importado</span>';
-      var can = st !== "sent";
-      return "<tr><td>" + (can ? '<input type="checkbox" data-id="' + esc(l.id) + '"' + (selected[l.id] ? " checked" : "") + ' aria-label="Selecionar">' : "") + "</td><td>" + esc(fmt(l.created_at)) + "</td><td>" + esc(d.name) + "</td><td>" + esc(d.email) + "<br><span class=\"muted small\">" + esc(d.phone) + "</span></td><td>" + esc(d.typology) + "</td><td>" + esc((d.language || "").toUpperCase()) + "</td><td>" + esc(d.utm_source || "—") + "</td><td>" + badge + (st === "failed" ? '<span class="errtxt">' + esc(l.error) + "</span>" : "") + "</td><td>" + (can ? '<button class="line small" data-resend="' + esc(l.id) + '">Reenviar</button>' : "") + "</td></tr>";
-    }).join("") : '<tr><td colspan="9" class="muted">Sem leads registados' + (filter !== "all" ? " neste filtro" : "") + ".</td></tr>";
+      var d = l.data || {}, st = l.status, can = st !== "sent";
+      var badge = st === "sent" ? '<span class="badge b-sent">' + t("sent") + "</span>" : st === "failed" ? '<span class="badge b-failed">' + t("failed") + "</span>" : '<span class="badge b-imported">' + t("imported") + "</span>";
+      return "<tr><td>" + (can ? '<input type="checkbox" data-id="' + esc(l.id) + '"' + (selected[l.id] ? " checked" : "") + ' aria-label="' + t("select") + '">' : "") + "</td><td>" + esc(fmt(l.created_at)) + "</td><td>" + esc(d.name) + "</td><td>" + esc(d.email) + '<br><span class="muted small">' + esc(d.phone) + "</span></td><td>" + esc(d.typology) + "</td><td>" + esc((d.language || "").toUpperCase()) + "</td><td>" + esc(d.utm_source || "—") + "</td><td>" + badge + (st === "failed" ? '<span class="errtxt">' + esc(l.error) + "</span>" : "") + "</td><td>" + (can ? '<button class="line small" data-resend="' + esc(l.id) + '">' + t("resend") + "</button>" : "") + "</td></tr>";
+    }).join("") : '<tr><td colspan="9" class="muted">' + t("noLeads") + (filter !== "all" ? t("inFilter") : "") + ".</td></tr>";
     updateSel();
   }
 
-  function updateSel() { var n = Object.keys(selected).length; $("resendSel").disabled = !n; $("resendSel").textContent = n ? "Reenviar selecionados (" + n + ")" : "Reenviar selecionados"; }
+  function updateSel() { var n = Object.keys(selected).length; $("resendSel").disabled = !n; $("resendSel").textContent = t("resendSel") + (n ? " (" + n + ")" : ""); }
 
   $("filters").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return; filter = b.getAttribute("data-f");
@@ -276,30 +353,25 @@
     btn.disabled = true;
     var chunks = []; for (var i = 0; i < ids.length; i += 5) chunks.push(ids.slice(i, i + 5));
     var next = function () {
-      if (!chunks.length) {
-        btn.disabled = false; btn.textContent = label; selected = {};
-        alert(ok + " enviado(s) para o Inmovilla" + (fail ? ", " + fail + " falharam.\n" + lastErr : "."));
-        return load();
-      }
-      btn.textContent = "A enviar… " + done + "/" + ids.length;
+      if (!chunks.length) { btn.disabled = false; btn.textContent = label; selected = {}; alert(t("resendDone")(ok, fail, lastErr)); return load(); }
+      btn.textContent = t("sending") + done + "/" + ids.length;
       api("POST", { action: "resend", ids: chunks.shift() }).then(function (j) {
         j.results.forEach(function (r) { done++; if (r.status === "sent") ok++; else { fail++; lastErr = r.error || r.status; } });
         if (fail && !ok) chunks = []; // se tudo falha (ex.: senha do Gmail), não insistir
         next();
-      }).catch(function (e) { btn.disabled = false; btn.textContent = label; alert("Erro: " + e.message); });
+      }).catch(function (e) { btn.disabled = false; btn.textContent = label; alert(t("error") + e.message); });
     };
     next();
   }
 
-  // ---- Importação do CSV do Netlify Forms
-  function parseCSV(t) {
+  function parseCSV(s) {
     var rows = [], row = [], f = "", q = false;
-    for (var i = 0; i < t.length; i++) {
-      var c = t[i];
-      if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      if (q) { if (c === '"') { if (s[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
       else if (c === '"') q = true;
       else if (c === ",") { row.push(f); f = ""; }
-      else if (c === "\n" || c === "\r") { if (c === "\r" && t[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+      else if (c === "\n" || c === "\r") { if (c === "\r" && s[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
       else f += c;
     }
     if (f || row.length) { row.push(f); rows.push(row); }
@@ -308,7 +380,7 @@
   $("csv").addEventListener("change", function () {
     var file = this.files[0]; if (!file) return; var input = this;
     file.text().then(function (txt) {
-      var r = parseCSV(txt.replace(/^﻿/, "")); if (r.length < 2) throw new Error("O ficheiro está vazio.");
+      var r = parseCSV(txt.replace(/^﻿/, "")); if (r.length < 2) throw new Error(t("csvEmpty"));
       var head = r[0].map(function (h) { return h.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, ""); });
       var objs = r.slice(1).map(function (cols) {
         var o = {}; head.forEach(function (h, i) { o[h] = (cols[i] || "").trim(); });
@@ -316,14 +388,15 @@
         if (o.created_at && !isNaN(Date.parse(o.created_at))) o.created_at = new Date(o.created_at).toISOString();
         return o;
       }).filter(function (o) { return o.name || o.email; });
-      if (!objs.length) throw new Error("Não encontrei as colunas name / email no ficheiro.");
-      if (!confirm("Importar " + objs.length + " lead(s)? Não são enviados para o Inmovilla até os reenviar.")) return;
+      if (!objs.length) throw new Error(t("csvCols"));
+      if (!confirm(t("csvConfirm")(objs.length))) return;
       var added = 0, skipped = 0, chunks = []; for (var i = 0; i < objs.length; i += 50) chunks.push(objs.slice(i, i + 50));
       return chunks.reduce(function (p, c) { return p.then(function () { return api("POST", { action: "import", rows: c }).then(function (j) { added += j.added; skipped += j.skipped; }); }); }, Promise.resolve())
-        .then(function () { alert(added + " importado(s), " + skipped + " já existiam ou foram ignorados."); filter = "imported"; document.querySelectorAll("#filters button").forEach(function (x) { x.setAttribute("aria-pressed", x.getAttribute("data-f") === "imported" ? "true" : "false"); }); return load(); });
-    }).catch(function (e) { alert("Erro na importação: " + e.message); }).finally(function () { input.value = ""; });
+        .then(function () { alert(t("csvDone")(added, skipped)); filter = "imported"; document.querySelectorAll("#filters button").forEach(function (x) { x.setAttribute("aria-pressed", x.getAttribute("data-f") === "imported" ? "true" : "false"); }); return load(); });
+    }).catch(function (e) { alert(t("csvErr") + e.message); }).finally(function () { input.value = ""; });
   });
 
+  applyLang();
   if (KEY) load(); else showLogin("");
 })();
 </script>
