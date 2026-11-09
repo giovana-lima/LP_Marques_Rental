@@ -4,7 +4,7 @@
 //   POST /api/painel {action:"resend", ids:[...]}  -> reenvia leads para a Inmovilla
 //   POST /api/painel {action:"import", rows:[...]} -> importa leads do CSV do Netlify Forms
 import { timingSafeEqual, createHash } from "node:crypto";
-import { leadStore, eventStore, trySend, transport, pick } from "../shared/leads.mjs";
+import { leadStore, trySend, transport, pick, getLeads, getEvents, lastDays } from "../shared/leads.mjs";
 
 const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
 
@@ -16,45 +16,13 @@ function authorised(req) {
   return timingSafeEqual(a, b);
 }
 
-async function listAll(store, prefix) {
-  const keys = [];
-  for await (const page of store.list({ prefix, paginate: true })) for (const b of page.blobs) keys.push(b.key);
-  return keys;
-}
-
-async function getLeads() {
-  const store = leadStore();
-  const keys = await listAll(store, "lead/");
-  const recs = await Promise.all(keys.map((k) => store.get(k, { type: "json" })));
-  return recs.filter(Boolean).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
-}
-
-async function getEvents(days) {
-  const store = eventStore();
-  const out = [];
-  const today = new Date();
-  const dayList = [];
-  for (let i = 0; i < days; i++) dayList.push(new Date(today.getTime() - i * 864e5).toISOString().slice(0, 10));
-  await Promise.all(dayList.map(async (day) => {
-    const keys = await listAll(store, `${day}/`);
-    const counts = {};
-    for (const k of keys) {
-      const [, e, l, d] = k.split("/");
-      const id = `${e}|${l}|${d}`;
-      counts[id] = (counts[id] || 0) + 1;
-    }
-    out.push({ day, counts });
-  }));
-  return out.sort((a, b) => b.day.localeCompare(a.day));
-}
-
 export default async (req) => {
   if (!process.env.PAINEL_PASSWORD) return json({ error: "PAINEL_PASSWORD não está configurada no Netlify." }, 503);
   if (!authorised(req)) return json({ error: "Senha incorreta." }, 401);
 
   if (req.method === "GET") {
     const days = Math.min(Math.max(parseInt(new URL(req.url).searchParams.get("days") || "30", 10) || 30, 1), 90);
-    const [leads, events] = await Promise.all([getLeads(), getEvents(days)]);
+    const [leads, events] = await Promise.all([getLeads(), getEvents(lastDays(days))]);
     return json({ leads, events, now: new Date().toISOString() });
   }
 

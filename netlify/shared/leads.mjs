@@ -94,3 +94,45 @@ export async function trySend(rec, tries = 2) {
 
 export const leadStore = () => getStore({ name: "leads", consistency: "strong" });
 export const eventStore = () => getStore({ name: "events" });
+
+// ---- Leitura dos registos (painel e API)
+export async function listAll(store, prefix) {
+  const keys = [];
+  for await (const page of store.list({ prefix, paginate: true })) for (const b of page.blobs) keys.push(b.key);
+  return keys;
+}
+
+export async function getLeads() {
+  const store = leadStore();
+  const keys = await listAll(store, "lead/");
+  const recs = await Promise.all(keys.map((k) => store.get(k, { type: "json" })));
+  return recs.filter(Boolean).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+}
+
+// Lista de dias (AAAA-MM-DD, UTC), do mais recente para o mais antigo
+export function lastDays(n) {
+  const out = [], now = Date.now();
+  for (let i = 0; i < n; i++) out.push(new Date(now - i * 864e5).toISOString().slice(0, 10));
+  return out;
+}
+export function dayRange(from, to) {
+  const out = [];
+  for (let t = Date.parse(to + "T00:00:00Z"); t >= Date.parse(from + "T00:00:00Z") && out.length < 400; t -= 864e5) out.push(new Date(t).toISOString().slice(0, 10));
+  return out;
+}
+
+// Contagens por dia: [{ day, counts: { "evento|lingua|detalhe": n } }]
+export async function getEvents(dayList) {
+  const store = eventStore();
+  const out = await Promise.all(dayList.map(async (day) => {
+    const keys = await listAll(store, `${day}/`);
+    const counts = {};
+    for (const k of keys) {
+      const [, e, l, d] = k.split("/");
+      const id = `${e}|${l}|${d}`;
+      counts[id] = (counts[id] || 0) + 1;
+    }
+    return { day, counts };
+  }));
+  return out.sort((a, b) => b.day.localeCompare(a.day));
+}

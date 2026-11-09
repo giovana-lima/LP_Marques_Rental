@@ -55,3 +55,37 @@ As páginas `public/rent-porto-pt.html` e `public/rent-porto-en.html` são gerad
 (textos PT/EN no início do ficheiro), `tools/v2.css` (estilo) e `tools/v2.js` (funcionamento).
 Depois de alterar, correr `python3 tools/build_v2.py`. O Cookiebot, o GTM, o SEO e o rodapé são
 mantidos a partir das páginas atuais. As fotos novas estão em `public/assets/img/v2/`.
+
+## Painel e API
+
+- **Painel:** `https://arrendar-marques.youropapt.com/painel` (senha = variável `PAINEL_PASSWORD`).
+  Mostra os leads e se chegaram ao Inmovilla, permite reenviar, importar o CSV do Netlify Forms
+  e testar a ligação ao Gmail. Também mostra visitas e cliques (contagem anónima, sem cookies).
+- **API só de leitura** (para o Youropa Dashboard ou outros sistemas). Precisa da variável `API_KEY`.
+  Enviar a chave no cabeçalho `Authorization: Bearer <API_KEY>`.
+
+| Endereço | O que devolve |
+| --- | --- |
+| `/api/v1/resumo?days=30` ou `?from=2026-11-01&to=2026-11-30` | Totais, série diária, por tipologia, por origem e leads (sem contactos) |
+| `/api/v1/leads?from=…&to=…&status=sent\|failed\|imported` | Lista de leads (sem contactos) |
+| `/api/v1/leads?…&contacts=1` | Lista de leads com nome, email e telefone |
+| `/api/v1/leads.csv?…` | O mesmo em CSV |
+
+Exemplo (Python, na atualização do `data.json` do dashboard):
+
+```python
+import json, os, urllib.request
+req = urllib.request.Request("https://arrendar-marques.youropapt.com/api/v1/resumo?days=90",
+                             headers={"Authorization": "Bearer " + os.environ["MARQUES_API_KEY"]})
+landing = json.load(urllib.request.urlopen(req))
+data = json.load(open("data.json", encoding="utf-8"))
+data["landingMarques"] = landing
+json.dump(data, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+```
+
+Se o dashboard chamar a API diretamente no browser, o domínio dele tem de estar em `API_ORIGINS`
+(ex.: `https://dashboard.youropapt.com`). Nesse caso a chave fica visível no código da página,
+por isso é preferível ir buscar os dados na atualização do `data.json`.
+
+Variáveis de ambiente usadas: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`,
+`LEAD_EMAIL_TO` (opcional), `PAINEL_PASSWORD`, `API_KEY`, `API_ORIGINS` (opcional).
