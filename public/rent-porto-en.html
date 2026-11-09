@@ -822,6 +822,24 @@
     <script>
       window.__lpReady = true; // o conteúdo só fica escondido para animar se este script correr
 
+      // ---- Contador anónimo para o painel /painel (sem cookies nem dados pessoais)
+      function tk(ev, d) {
+        try {
+          var s = JSON.stringify({ e: ev, l: "en", d: d || "" });
+          if (navigator.sendBeacon) navigator.sendBeacon("/api/track", s);
+          else fetch("/api/track", { method: "POST", body: s, keepalive: true });
+        } catch (x) {}
+      }
+      tk("pv", /[?&]utm_source=google|[?&]gclid=/.test(location.search) ? "google" : (document.referrer && document.referrer.indexOf(location.host) < 0 ? "ext" : "direct"));
+      document.addEventListener("click", function (ev) {
+        var a = ev.target.closest && ev.target.closest("a");
+        if (!a) return;
+        var h = a.getAttribute("href") || "";
+        if (h === "#contact") tk("cta", a.getAttribute("data-pick") || (a.classList.contains("navcta") ? "menu" : a.classList.contains("btn-sm") ? "header" : a.closest(".hero") ? "hero" : "other"));
+        else if (h.indexOf("tel:") === 0) tk("tel");
+        else if (a.classList.contains("lang")) tk("lang");
+      });
+
       // ---- Cabeçalho: fica sólido ao fazer scroll; menu no telemóvel
       var topbar = document.getElementById("top");
       function onScroll() { topbar.classList.toggle("solid", window.scrollY > 40); }
@@ -892,7 +910,7 @@
       }
       var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
       tabs.forEach(function (b, i) {
-        b.addEventListener("click", function () { showType(b.getAttribute("data-t")); });
+        b.addEventListener("click", function () { showType(b.getAttribute("data-t")); tk("tab", b.getAttribute("data-t")); });
         b.addEventListener("keydown", function (ev) {
           var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[ev.key];
           if (k === undefined) return;
@@ -918,10 +936,10 @@
         lbShow(lbItems.indexOf(el));
         if (lb.showModal) lb.showModal(); else lb.setAttribute("open", "");
       }
-      document.querySelectorAll(".gi").forEach(function (g, i, all) { g.addEventListener("click", function () { lbOpen(all, g); }); });
+      document.querySelectorAll(".gi").forEach(function (g, i, all) { g.addEventListener("click", function () { lbOpen(all, g); tk("gallery"); }); });
       document.querySelectorAll(".panel").forEach(function (p) {
         var plans = p.querySelectorAll(".plan");
-        plans.forEach(function (g) { g.addEventListener("click", function () { lbOpen(plans, g); }); });
+        plans.forEach(function (g) { g.addEventListener("click", function () { lbOpen(plans, g); tk("plan", (g.getAttribute("data-cap") || "").split(" ")[0]); }); });
       });
       lb.querySelectorAll(".lbnav").forEach(function (b) {
         b.addEventListener("click", function () { lbShow(lbIdx + parseInt(b.getAttribute("data-dir"), 10)); });
@@ -986,14 +1004,18 @@
       // O email para a Inmovilla é enviado pela função netlify/functions/submission-created.mjs.
       var THANKS_URL = "thank-you-en.html";
       var form = document.getElementById("lead"), btn = form.querySelector("button[type=submit]");
+      var started = false;
+      form.addEventListener("focusin", function () { if (!started) { started = true; tk("form_start"); } });
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (form.website && form.website.value) return; // armadilha de spam
         if (!iti.isValidNumber()) {
+          tk("phone_invalid");
           phoneInput.setCustomValidity(PHONE_MSG);
           phoneInput.reportValidity();
           return;
         }
+        tk("submit_try", form.typology ? form.typology.value : "");
         btn.disabled = true;
         var btnLabel = btn.textContent;
         btn.textContent = "Sending…";
@@ -1002,9 +1024,11 @@
         fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: data.toString() })
           .then(function (r) {
             if (!r.ok) throw new Error("HTTP " + r.status);
+            tk("submit_ok", form.typology ? form.typology.value : "");
             location.href = THANKS_URL;
           })
-          .catch(function () {
+          .catch(function (err) {
+            tk("submit_err", String(err && err.message || "net").replace(/\W/g, ""));
             btn.disabled = false;
             btn.textContent = btnLabel;
             alert("Sorry, something went wrong. Please try again or contact us.");

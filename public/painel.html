@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel Marquês</title>
+<link rel="icon" href="/assets/img/favicon.svg?v=3" type="image/svg+xml">
+<style>
+  :root {
+    --navy: #16152b; --gold: #e2bd7a; --gold-ink: #86662b; --paper: #fbf9f4; --card: #fff;
+    --ink: #16152b; --muted: #5b5974; --line: #e6e1d6; --ok: #1f7a4d; --ok-bg: #e5f3ec;
+    --bad: #b3261e; --bad-bg: #fbe9e7; --warn: #8a5a00; --warn-bg: #fdf3dc; --info-bg: #eef0f7;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { background: var(--navy); color: #fff; padding: 16px; }
+  .hin { max-width: 1200px; margin: 0 auto; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 17px; font-weight: 600; margin: 0 auto 0 0; letter-spacing: .01em; }
+  header h1 span { color: var(--gold); font-weight: 400; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; }
+  h2 { font-size: 16px; margin: 36px 0 12px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  button, select, input[type=password] { font: inherit; }
+  button { cursor: pointer; border: 1px solid var(--navy); background: var(--navy); color: #fff; padding: 8px 14px; border-radius: 6px; }
+  button.line { background: transparent; color: var(--navy); }
+  header button.line { color: #fff; border-color: rgba(255,255,255,.5); }
+  button:disabled { opacity: .5; cursor: default; }
+  select { padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,.5); background: transparent; color: #fff; }
+  select option { color: var(--ink); }
+  .login { max-width: 360px; margin: 12vh auto; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 28px; }
+  .login h1 { font-size: 20px; margin: 0 0 6px; }
+  .login input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; margin: 14px 0 12px; }
+  .login button { width: 100%; padding: 10px; }
+  .err { color: var(--bad); font-size: 14px; min-height: 1.5em; }
+  .banner { border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .banner p { margin: 0; flex: 1 1 320px; }
+  .banner.bad { background: var(--bad-bg); color: var(--bad); }
+  .banner.ok { background: var(--ok-bg); color: var(--ok); }
+  .banner.warn { background: var(--warn-bg); color: var(--warn); }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .kpi .v { font-size: 28px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; margin: 4px 0; }
+  .kpi .l { font-size: 13px; color: var(--muted); }
+  .kpi .s { font-size: 12px; color: var(--muted); }
+  .kpi.bad .v { color: var(--bad); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; background: #faf8f3; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  .badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+  .b-sent { background: var(--ok-bg); color: var(--ok); }
+  .b-failed { background: var(--bad-bg); color: var(--bad); }
+  .b-imported { background: var(--info-bg); color: var(--navy); }
+  .errtxt { display: block; font-size: 12px; color: var(--bad); white-space: normal; max-width: 280px; }
+  .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .filters button { background: transparent; color: var(--muted); border-color: var(--line); }
+  .filters button[aria-pressed=true] { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .grid2 .card { padding: 4px 0; }
+  .grid2 h3 { font-size: 14px; margin: 10px 14px 4px; }
+  .spark { display: inline-block; height: 8px; background: var(--gold); border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+  .help { font-size: 13px; color: var(--muted); max-width: 70ch; }
+  .hidden { display: none !important; }
+  input[type=checkbox] { width: 16px; height: 16px; }
+  @media (max-width: 600px) { .kpi .v { font-size: 24px; } }
+</style>
+</head>
+<body>
+
+<section id="login" class="login">
+  <h1>Painel Marquês</h1>
+  <p class="muted small">Leads, envios para o Inmovilla e cliques das landing pages.</p>
+  <form id="lf">
+    <label for="pw" class="small">Senha</label>
+    <input id="pw" type="password" autocomplete="current-password" required>
+    <button type="submit">Entrar</button>
+    <p class="err" id="lerr"></p>
+  </form>
+</section>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="hin">
+      <h1>Painel <span>· Jardins do Marquês</span></h1>
+      <select id="days" aria-label="Período">
+        <option value="1">Hoje</option>
+        <option value="7" selected>Últimos 7 dias</option>
+        <option value="30">Últimos 30 dias</option>
+        <option value="90">Últimos 90 dias</option>
+      </select>
+      <button class="line" id="refresh">Atualizar</button>
+      <button class="line" id="logout">Sair</button>
+    </div>
+  </header>
+  <main>
+    <div id="banners"></div>
+
+    <div class="kpis" id="kpis"></div>
+    <p class="help" id="updated"></p>
+
+    <h2>Leads</h2>
+    <div class="bar">
+      <div class="filters bar" style="margin:0" id="filters">
+        <button data-f="all" aria-pressed="true">Todos</button>
+        <button data-f="failed" aria-pressed="false">Falhados</button>
+        <button data-f="imported" aria-pressed="false">Importados</button>
+        <button data-f="sent" aria-pressed="false">Enviados</button>
+      </div>
+      <span style="flex:1"></span>
+      <button id="resendSel" disabled>Reenviar selecionados</button>
+      <label class="small" style="cursor:pointer"><input type="file" id="csv" accept=".csv,text/csv" class="hidden"><span class="line" style="display:inline-block;border:1px solid var(--navy);border-radius:6px;padding:8px 14px">Importar CSV do Netlify</span></label>
+    </div>
+    <div class="card"><div class="tablewrap"><table>
+      <thead><tr><th><input type="checkbox" id="all" aria-label="Selecionar todos"></th><th>Data</th><th>Nome</th><th>Email / telefone</th><th>Tipologia</th><th>Idioma</th><th>Origem</th><th>Envio Inmovilla</th><th></th></tr></thead>
+      <tbody id="leads"></tbody>
+    </table></div></div>
+    <p class="help">"Importar CSV do Netlify" serve para recuperar leads antigos: no Netlify, abra Forms › lead › <b>Download as CSV</b> e escolha o ficheiro aqui. Os leads entram como "Importado" e só vão para o Inmovilla quando os selecionar e clicar em "Reenviar".</p>
+
+    <h2>Atividade por dia</h2>
+    <div class="card"><div class="tablewrap"><table>
+      <thead><tr><th>Dia</th><th class="num">Visitas</th><th class="num">Cliques "Saiba mais"</th><th class="num">Formulário começado</th><th class="num">Formulário enviado</th><th class="num">Página de obrigado</th><th class="num">Leads registados</th><th class="num">Emails falhados</th></tr></thead>
+      <tbody id="daily"></tbody>
+    </table></div></div>
+
+    <h2>Detalhe dos cliques</h2>
+    <div class="grid2" id="breakdown"></div>
+    <p class="help">As visitas e os cliques são contados de forma anónima (sem cookies e sem dados pessoais). Os contadores começaram a 9 de novembro de 2026.</p>
+  </main>
+</div>
+
+<script>
+(function () {
+  var KEY = "";
+  try { KEY = sessionStorage.getItem("painelKey") || ""; } catch (e) {}
+  var data = null, filter = "all", selected = {};
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var fmt = function (iso) { try { return new Date(iso).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon", day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" }); } catch (e) { return iso; } };
+  var day = function (iso) { try { return new Date(iso).toLocaleDateString("sv-SE", { timeZone: "Europe/Lisbon" }); } catch (e) { return String(iso).slice(0, 10); } };
+
+  function api(method, body) {
+    var url = "/api/painel" + (method === "GET" ? "?days=" + $("days").value : "");
+    return fetch(url, { method: method, headers: { "x-painel-key": KEY, "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw Object.assign(new Error(j.error || ("Erro " + r.status)), { status: r.status }); return j; }); });
+  }
+
+  function showLogin(msg) {
+    $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("lerr").textContent = msg || "";
+  }
+  function load() {
+    $("refresh").disabled = true;
+    return api("GET").then(function (j) {
+      data = j; $("login").classList.add("hidden"); $("app").classList.remove("hidden"); render();
+    }).catch(function (e) {
+      if (e.status === 401 || e.status === 503) { try { sessionStorage.removeItem("painelKey"); } catch (x) {} showLogin(e.message); }
+      else alert("Não foi possível carregar o painel: " + e.message);
+    }).finally(function () { $("refresh").disabled = false; });
+  }
+
+  $("lf").addEventListener("submit", function (e) {
+    e.preventDefault(); KEY = $("pw").value; try { sessionStorage.setItem("painelKey", KEY); } catch (x) {} load();
+  });
+  $("logout").addEventListener("click", function () { KEY = ""; try { sessionStorage.removeItem("painelKey"); } catch (x) {} $("pw").value = ""; showLogin(""); });
+  $("refresh").addEventListener("click", load);
+  $("days").addEventListener("change", load);
+
+  // ---- soma de eventos: counts["evento|lingua|detalhe"]
+  function sum(ev, lang, detail, days) {
+    var t = 0;
+    (days || data.events).forEach(function (d) {
+      for (var k in d.counts) {
+        var p = k.split("|");
+        if (p[0] === ev && (!lang || p[1] === lang) && (!detail || p[2] === detail)) t += d.counts[k];
+      }
+    });
+    return t;
+  }
+  function inPeriod(rec) {
+    var first = data.events.length ? data.events[data.events.length - 1].day : "";
+    return day(rec.created_at) >= first;
+  }
+
+  function render() {
+    var leads = data.leads, period = leads.filter(inPeriod);
+    var failedAll = leads.filter(function (l) { return l.status === "failed"; });
+    var importedAll = leads.filter(function (l) { return l.status === "imported"; });
+    var sentP = period.filter(function (l) { return l.status === "sent"; }).length;
+    var failedP = period.filter(function (l) { return l.status === "failed"; }).length;
+
+    // Avisos
+    var b = "";
+    if (failedAll.length) b += '<div class="banner bad"><p><b>' + failedAll.length + ' lead' + (failedAll.length > 1 ? "s" : "") + ' não chegou' + (failedAll.length > 1 ? "aram" : "") + ' ao Inmovilla.</b> Último erro: ' + esc(failedAll[0].error || "") + '</p><button id="resendFailed">Reenviar falhados</button></div>';
+    else if (leads.length) b += '<div class="banner ok"><p><b>Envios em dia.</b> Último lead enviado para o Inmovilla: ' + esc(fmt((leads.find(function (l) { return l.status === "sent"; }) || {}).created_at || "")) + '</p></div>';
+    if (importedAll.length) b += '<div class="banner warn"><p>' + importedAll.length + ' lead(s) importado(s) ainda não foram enviados para o Inmovilla.</p></div>';
+    b += '<div class="banner warn" id="smtpBox" style="background:var(--info-bg);color:var(--navy)"><p id="smtpMsg">Ligação ao Gmail (conta que envia os leads): por testar.</p><button class="line" id="smtpBtn">Testar ligação</button></div>';
+    var subOk = sum("submit_ok"), recP = period.filter(function (l) { return l.source === "site"; }).length;
+    if (subOk > recP) b += '<div class="banner warn"><p>O site enviou ' + subOk + ' formulário(s) neste período, mas só ' + recP + ' chegaram à função de envio. A diferença costuma ser formulários marcados como spam pelo Netlify (Forms › lead › Spam submissions).</p></div>';
+    $("banners").innerHTML = b;
+    if ($("resendFailed")) $("resendFailed").addEventListener("click", function () { resend(failedAll.map(function (l) { return l.id; }), this); });
+    $("smtpBtn").addEventListener("click", function () {
+      var btn = this; btn.disabled = true; $("smtpMsg").textContent = "A testar…";
+      api("POST", { action: "smtp" }).then(function (j) {
+        $("smtpBox").style.background = j.ok ? "var(--ok-bg)" : "var(--bad-bg)"; $("smtpBox").style.color = j.ok ? "var(--ok)" : "var(--bad)";
+        $("smtpMsg").innerHTML = j.ok ? "<b>Ligação ao Gmail: OK.</b> Os leads novos vão ser enviados." : "<b>Ligação ao Gmail falhou:</b> " + esc(String(j.error).replace(/\.+$/, "")) + ". Verifique a senha de app em SMTP_PASS no Netlify.";
+      }).catch(function (e) { $("smtpMsg").textContent = "Erro: " + e.message; }).finally(function () { btn.disabled = false; });
+    });
+
+    // KPIs
+    var pv = sum("pv"), cta = sum("cta"), fs = sum("form_start"), so = sum("submit_ok");
+    var k = [
+      ["Visitas", pv, "PT " + sum("pv", "pt") + " · EN " + sum("pv", "en")],
+      ['Cliques "Saiba mais"', cta, "PT " + sum("cta", "pt") + " · EN " + sum("cta", "en")],
+      ["Formulário começado", fs, pv ? Math.round(fs / pv * 100) + "% das visitas" : ""],
+      ["Formulário enviado", so, pv ? (so / pv * 100).toFixed(1).replace(".", ",") + "% das visitas" : ""],
+      ["Enviados ao Inmovilla", sentP, "leads registados neste período"],
+      ["Envios falhados", failedP, failedP ? "ver lista abaixo" : "nenhum", failedP > 0]
+    ];
+    $("kpis").innerHTML = k.map(function (x) { return '<div class="kpi' + (x[3] ? " bad" : "") + '"><div class="l">' + x[0] + '</div><div class="v">' + x[1] + '</div><div class="s">' + esc(x[2]) + '</div></div>'; }).join("");
+    $("updated").textContent = "Atualizado às " + fmt(data.now) + ".";
+
+    renderLeads();
+
+    // Diário
+    $("daily").innerHTML = data.events.map(function (d) {
+      var one = [d], L = leads.filter(function (l) { return day(l.created_at) === d.day; });
+      return "<tr><td>" + d.day.split("-").reverse().join("/") + "</td>" + [sum("pv", 0, 0, one), sum("cta", 0, 0, one), sum("form_start", 0, 0, one), sum("submit_ok", 0, 0, one), sum("thanks", 0, 0, one),
+        L.filter(function (l) { return l.source === "site"; }).length, L.filter(function (l) { return l.status === "failed"; }).length].map(function (v) { return '<td class="num">' + v + "</td>"; }).join("") + "</tr>";
+    }).join("");
+
+    // Detalhe
+    function block(title, ev, labels) {
+      var rows = labels.map(function (x) { return [x[1], sum(ev, 0, x[0])]; });
+      var max = Math.max.apply(null, rows.map(function (r) { return r[1]; }).concat([1]));
+      return '<div class="card"><h3>' + title + '</h3><table><tbody>' + rows.map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td class="num"><span class="spark" style="width:' + Math.round(r[1] / max * 80) + 'px"></span>' + r[1] + '</td></tr>'; }).join("") + '</tbody></table></div>';
+    }
+    var T = [["T0", "T0 · Estúdio"], ["T1", "T1 · Duplex"], ["T2", "T2 · Duplex"], ["T3", "T3 · Duplex"]];
+    $("breakdown").innerHTML =
+      block('Onde clicaram em "Saiba mais"', "cta", [["header", "Topo da página"], ["menu", "Menu"], ["hero", "Início (hero)"], ["T0", "Separador T0"], ["T1", "Separador T1"], ["T2", "Separador T2"], ["T3", "Separador T3"]]) +
+      block("Separadores das tipologias", "tab", T) +
+      block("Plantas abertas", "plan", T) +
+      block("Formulários enviados por tipologia", "submit_ok", T) +
+      block("Outros", "", []).replace("<tbody></tbody>", "<tbody>" + [["Fotos da galeria abertas", sum("gallery")], ["Cliques no telefone", sum("tel")], ["Mudança de idioma", sum("lang")], ["Telefone inválido no formulário", sum("phone_invalid")], ["Erro ao enviar o formulário", sum("submit_err")]].map(function (r) { return "<tr><td>" + r[0] + '</td><td class="num">' + r[1] + "</td></tr>"; }).join("") + "</tbody>") +
+      block("Origem das visitas", "pv", [["google", "Google Ads"], ["ext", "Outros sites"], ["direct", "Direto / sem origem"]]);
+  }
+
+  function renderLeads() {
+    var rows = data.leads.filter(function (l) { return filter === "all" || l.status === filter; });
+    $("leads").innerHTML = rows.length ? rows.map(function (l) {
+      var d = l.data || {}, st = l.status;
+      var badge = st === "sent" ? '<span class="badge b-sent">Enviado</span>' : st === "failed" ? '<span class="badge b-failed">Falhou</span>' : '<span class="badge b-imported">Importado</span>';
+      var can = st !== "sent";
+      return "<tr><td>" + (can ? '<input type="checkbox" data-id="' + esc(l.id) + '"' + (selected[l.id] ? " checked" : "") + ' aria-label="Selecionar">' : "") + "</td><td>" + esc(fmt(l.created_at)) + "</td><td>" + esc(d.name) + "</td><td>" + esc(d.email) + "<br><span class=\"muted small\">" + esc(d.phone) + "</span></td><td>" + esc(d.typology) + "</td><td>" + esc((d.language || "").toUpperCase()) + "</td><td>" + esc(d.utm_source || "—") + "</td><td>" + badge + (st === "failed" ? '<span class="errtxt">' + esc(l.error) + "</span>" : "") + "</td><td>" + (can ? '<button class="line small" data-resend="' + esc(l.id) + '">Reenviar</button>' : "") + "</td></tr>";
+    }).join("") : '<tr><td colspan="9" class="muted">Sem leads registados' + (filter !== "all" ? " neste filtro" : "") + ".</td></tr>";
+    updateSel();
+  }
+
+  function updateSel() { var n = Object.keys(selected).length; $("resendSel").disabled = !n; $("resendSel").textContent = n ? "Reenviar selecionados (" + n + ")" : "Reenviar selecionados"; }
+
+  $("filters").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return; filter = b.getAttribute("data-f");
+    this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); }); renderLeads();
+  });
+  $("leads").addEventListener("change", function (e) { var id = e.target.getAttribute("data-id"); if (!id) return; if (e.target.checked) selected[id] = 1; else delete selected[id]; updateSel(); });
+  $("all").addEventListener("change", function () { var on = this.checked; $("leads").querySelectorAll("input[data-id]").forEach(function (c) { c.checked = on; if (on) selected[c.getAttribute("data-id")] = 1; else delete selected[c.getAttribute("data-id")]; }); updateSel(); });
+  $("leads").addEventListener("click", function (e) { var b = e.target.closest("button[data-resend]"); if (b) resend([b.getAttribute("data-resend")], b); });
+  $("resendSel").addEventListener("click", function () { resend(Object.keys(selected), this); });
+
+  function resend(ids, btn) {
+    if (!ids.length) return;
+    var label = btn.textContent, done = 0, ok = 0, fail = 0, lastErr = "";
+    btn.disabled = true;
+    var chunks = []; for (var i = 0; i < ids.length; i += 5) chunks.push(ids.slice(i, i + 5));
+    var next = function () {
+      if (!chunks.length) {
+        btn.disabled = false; btn.textContent = label; selected = {};
+        alert(ok + " enviado(s) para o Inmovilla" + (fail ? ", " + fail + " falharam.\n" + lastErr : "."));
+        return load();
+      }
+      btn.textContent = "A enviar… " + done + "/" + ids.length;
+      api("POST", { action: "resend", ids: chunks.shift() }).then(function (j) {
+        j.results.forEach(function (r) { done++; if (r.status === "sent") ok++; else { fail++; lastErr = r.error || r.status; } });
+        if (fail && !ok) chunks = []; // se tudo falha (ex.: senha do Gmail), não insistir
+        next();
+      }).catch(function (e) { btn.disabled = false; btn.textContent = label; alert("Erro: " + e.message); });
+    };
+    next();
+  }
+
+  // ---- Importação do CSV do Netlify Forms
+  function parseCSV(t) {
+    var rows = [], row = [], f = "", q = false;
+    for (var i = 0; i < t.length; i++) {
+      var c = t[i];
+      if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true;
+      else if (c === ",") { row.push(f); f = ""; }
+      else if (c === "\n" || c === "\r") { if (c === "\r" && t[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+      else f += c;
+    }
+    if (f || row.length) { row.push(f); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (x) { return x.trim(); }); });
+  }
+  $("csv").addEventListener("change", function () {
+    var file = this.files[0]; if (!file) return; var input = this;
+    file.text().then(function (txt) {
+      var r = parseCSV(txt.replace(/^﻿/, "")); if (r.length < 2) throw new Error("O ficheiro está vazio.");
+      var head = r[0].map(function (h) { return h.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, ""); });
+      var objs = r.slice(1).map(function (cols) {
+        var o = {}; head.forEach(function (h, i) { o[h] = (cols[i] || "").trim(); });
+        if (!o.created_at) { var k = head.find(function (h) { return /created|date|data/.test(h); }); if (k) o.created_at = o[k]; }
+        if (o.created_at && !isNaN(Date.parse(o.created_at))) o.created_at = new Date(o.created_at).toISOString();
+        return o;
+      }).filter(function (o) { return o.name || o.email; });
+      if (!objs.length) throw new Error("Não encontrei as colunas name / email no ficheiro.");
+      if (!confirm("Importar " + objs.length + " lead(s)? Não são enviados para o Inmovilla até os reenviar.")) return;
+      var added = 0, skipped = 0, chunks = []; for (var i = 0; i < objs.length; i += 50) chunks.push(objs.slice(i, i + 50));
+      return chunks.reduce(function (p, c) { return p.then(function () { return api("POST", { action: "import", rows: c }).then(function (j) { added += j.added; skipped += j.skipped; }); }); }, Promise.resolve())
+        .then(function () { alert(added + " importado(s), " + skipped + " já existiam ou foram ignorados."); filter = "imported"; document.querySelectorAll("#filters button").forEach(function (x) { x.setAttribute("aria-pressed", x.getAttribute("data-f") === "imported" ? "true" : "false"); }); return load(); });
+    }).catch(function (e) { alert("Erro na importação: " + e.message); }).finally(function () { input.value = ""; });
+  });
+
+  if (KEY) load(); else showLogin("");
+})();
+</script>
+</body>
+</html>

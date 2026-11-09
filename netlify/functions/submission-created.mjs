@@ -1,72 +1,39 @@
 // Corre automaticamente sempre que o Netlify recebe um formulário válido (evento "submission-created").
-// Envia o lead para a Inmovilla no formato combinado.
+// Envia o lead para a Inmovilla e guarda o resultado (enviado / falhou) para o painel /painel.
 //
 // Variáveis de ambiente (Netlify > Site configuration > Environment variables):
 //   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS  -> dados da conta de email que envia
-//   SMTP_FROM                                   -> remetente, ex: "Youropa <leads@youropapt.com>"
-//   LEAD_EMAIL_TO (opcional)                    -> destino; por defeito o email da Inmovilla abaixo
+//   SMTP_FROM                                   -> remetente
+//   LEAD_EMAIL_TO (opcional)                    -> destino; por defeito o email da Inmovilla
+//   PAINEL_PASSWORD                             -> senha da página /painel
 
-import nodemailer from "nodemailer";
+import { connectLambda } from "@netlify/blobs";
+import { pick, trySend, leadStore, buildEmail } from "../shared/leads.mjs";
 
-const DEFAULT_TO = "i.youroparealestateportugal.14287@inmovilla.com";
-
-// Referência do imóvel por tipologia
-const REFS = { T0: "YR00041", T1: "YR00042", T2: "YR00043", T3: "YR00096" };
-
-export function buildEmail(data) {
-  const clean = (v) => String(v ?? "").trim();
-  const name = clean(data.name);
-  const typology = clean(data.typology);
-  const origin =
-    clean(data.language) === "en" ? "LP Marques Rental EN" : "LP Marques Rental PT";
-
-  const subject = `New contact from: ${name}`;
-  const text = [
-    "Dear Client,",
-    "Please find below the details of your new lead.",
-    "",
-    `email: ${clean(data.email)}`,
-    `name: ${name}`,
-    `phone number: ${clean(data.phone)}`,
-    `Origin: ${origin}`,
-    `Ref : ${REFS[typology] || ""}`,
-    "",
-    "Message:",
-    "",
-    "Que tipologia de apartamento procura?",
-    typology,
-    "",
-    "O valor inicial da renda da tipologia que prefere está dentro do seu orçamento?",
-    clean(data.within_budget),
-    "",
-    "Está disponível para mudar-se…",
-    clean(data.move_in_timing),
-    "",
-    "Best of luck!",
-  ].join("\n");
-
-  return { subject, text };
-}
+export { buildEmail };
 
 export const handler = async (event) => {
   const { payload } = JSON.parse(event.body);
   if (payload.form_name !== "lead") return { statusCode: 200, body: "ignored" };
 
-  const { subject, text } = buildEmail(payload.data || {});
+  const rec = {
+    id: String(payload.id || Date.now()),
+    created_at: payload.created_at || new Date().toISOString(),
+    source: "site",
+    data: pick(payload.data || {}),
+  };
+  await trySend(rec);
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 465),
-    secure: Number(process.env.SMTP_PORT || 465) === 465,
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-  });
+  try {
+    connectLambda(event);
+    await leadStore().setJSON(`lead/${rec.id}`, rec);
+  } catch (e) {
+    console.error("Não foi possível guardar o registo do lead:", e && e.message);
+  }
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to: process.env.LEAD_EMAIL_TO || DEFAULT_TO,
-    subject,
-    text,
-  });
-
+  if (rec.status !== "sent") {
+    console.error(`FALHA no envio do lead ${rec.id} (${rec.data.name || ""}): ${rec.error}`);
+    return { statusCode: 500, body: "send failed" };
+  }
   return { statusCode: 200, body: "sent" };
 };

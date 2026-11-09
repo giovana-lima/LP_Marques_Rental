@@ -65,3 +65,10 @@
   from = "/"
   to = "/rent-porto-pt.html"
   status = 200
+
+# Painel interno de controlo (leads, envios e cliques) — não aparece no Google
+[[headers]]
+  for = "/painel*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
