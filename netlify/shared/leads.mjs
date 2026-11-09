@@ -92,7 +92,9 @@ export async function trySend(rec, tries = 2) {
   return rec;
 }
 
-export const leadStore = () => getStore({ name: "leads", consistency: "strong" });
+// strong = leituras sempre atualizadas (só disponível nas funções v2, como o painel e a API).
+// A função submission-created (formato Lambda) tem de usar a consistência normal.
+export const leadStore = (strong = true) => getStore(strong ? { name: "leads", consistency: "strong" } : { name: "leads" });
 export const eventStore = () => getStore({ name: "events" });
 
 // ---- Leitura dos registos (painel e API)

@@ -26,7 +26,7 @@ export const handler = async (event) => {
 
   try {
     connectLambda(event);
-    await leadStore().setJSON(`lead/${rec.id}`, rec);
+    await leadStore(false).setJSON(`lead/${rec.id}`, rec);
   } catch (e) {
     console.error("Não foi possível guardar o registo do lead:", e && e.message);
   }
