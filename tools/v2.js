@@ -148,6 +148,20 @@
       });
       document.getElementById("campaign").value = q.get("utm_campaign") || "";
 
+      // ---- Origem do lead (campo "source"), a partir da UTM Source ou, sem UTM, do site de onde veio
+      var SOURCES = { ig: "Instagram", instagram: "Instagram", fb: "Facebook", facebook: "Facebook", meta: "Meta",
+        an: "Meta", msg: "Meta", google: "Google", adwords: "Google", gads: "Google", linkedin: "LinkedIn",
+        idealista: "Idealista", imovirtual: "Imovirtual", email: "Email", newsletter: "Email", mailchimp: "Email" };
+      var us = (q.get("utm_source") || "").toLowerCase().trim(), src = "Direto";
+      if (us) src = SOURCES[us] || (us.charAt(0).toUpperCase() + us.slice(1));
+      else if (q.get("gclid") || q.get("gbraid") || q.get("wbraid")) src = "Google";
+      else if (q.get("fbclid")) src = "Meta";
+      else if (document.referrer && document.referrer.indexOf(location.host) < 0) {
+        var rh = ""; try { rh = new URL(document.referrer).hostname; } catch (e) {}
+        src = /google\./.test(rh) ? "Google (orgânico)" : /instagram\./.test(rh) ? "Instagram" : /facebook\.|fb\./.test(rh) ? "Facebook" : rh ? rh.replace(/^www\./, "") : "Direto";
+      }
+      document.getElementById("source").value = src;
+
       // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1, ?type=T2 ou ?type=T3
       var typeParam = (q.get("type") || "").toUpperCase();
       if (REFS[typeParam]) {

@@ -785,7 +785,7 @@
             <input type="hidden" name="origin" value="LP Marques Rental EN" />
             <input type="hidden" name="location" value="Porto - Marquês" />
             <input type="hidden" name="property_ref" id="ref" value="" />
-            <input type="hidden" name="source" value="Google" />
+            <input type="hidden" name="source" id="source" value="Direto" />
             <input type="hidden" name="campaign" id="campaign" value="" />
             <input type="hidden" name="language" value="en" />
             <input type="hidden" name="utm_source" id="utm_source" /><input type="hidden" name="utm_medium" id="utm_medium" /><input type="hidden" name="utm_campaign" id="utm_campaign" /><input type="hidden" name="utm_content" id="utm_content" /><input type="hidden" name="utm_term" id="utm_term" />
@@ -969,6 +969,20 @@
         if (el && q.get(k)) el.value = q.get(k);
       });
       document.getElementById("campaign").value = q.get("utm_campaign") || "";
+
+      // ---- Origem do lead (campo "source"), a partir da UTM Source ou, sem UTM, do site de onde veio
+      var SOURCES = { ig: "Instagram", instagram: "Instagram", fb: "Facebook", facebook: "Facebook", meta: "Meta",
+        an: "Meta", msg: "Meta", google: "Google", adwords: "Google", gads: "Google", linkedin: "LinkedIn",
+        idealista: "Idealista", imovirtual: "Imovirtual", email: "Email", newsletter: "Email", mailchimp: "Email" };
+      var us = (q.get("utm_source") || "").toLowerCase().trim(), src = "Direto";
+      if (us) src = SOURCES[us] || (us.charAt(0).toUpperCase() + us.slice(1));
+      else if (q.get("gclid") || q.get("gbraid") || q.get("wbraid")) src = "Google";
+      else if (q.get("fbclid")) src = "Meta";
+      else if (document.referrer && document.referrer.indexOf(location.host) < 0) {
+        var rh = ""; try { rh = new URL(document.referrer).hostname; } catch (e) {}
+        src = /google\./.test(rh) ? "Google (orgânico)" : /instagram\./.test(rh) ? "Instagram" : /facebook\.|fb\./.test(rh) ? "Facebook" : rh ? rh.replace(/^www\./, "") : "Direto";
+      }
+      document.getElementById("source").value = src;
 
       // ---- Tipologia vinda do anúncio: ?type=T0, ?type=T1, ?type=T2 ou ?type=T3
       var typeParam = (q.get("type") || "").toUpperCase();

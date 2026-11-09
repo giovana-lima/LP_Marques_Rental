@@ -373,7 +373,7 @@ def build(lang):
             <input type="hidden" name="origin" value="{t['origin']}" />
             <input type="hidden" name="location" value="Porto - Marquês" />
             <input type="hidden" name="property_ref" id="ref" value="" />
-            <input type="hidden" name="source" value="Google" />
+            <input type="hidden" name="source" id="source" value="Direto" />
             <input type="hidden" name="campaign" id="campaign" value="" />
             <input type="hidden" name="language" value="{'pt' if lang == 'pt' else 'en'}" />
             <input type="hidden" name="utm_source" id="utm_source" /><input type="hidden" name="utm_medium" id="utm_medium" /><input type="hidden" name="utm_campaign" id="utm_campaign" /><input type="hidden" name="utm_content" id="utm_content" /><input type="hidden" name="utm_term" id="utm_term" />

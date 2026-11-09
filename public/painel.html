@@ -134,8 +134,6 @@
       <label>UTM Source<select data-k="utm_source"></select></label>
       <label>UTM Medium<select data-k="utm_medium"></select></label>
       <label>UTM Campaign<select data-k="utm_campaign"></select></label>
-      <label>UTM Content<select data-k="utm_content"></select></label>
-      <label>UTM Term<select data-k="utm_term"></select></label>
       <label><span data-t="thType"></span><select data-k="typology"></select></label>
       <label><span data-t="thLang"></span><select data-k="language"></select></label>
       <label><span data-t="from"></span><input type="date" id="lfFrom"></label>
@@ -143,7 +141,7 @@
     </div>
     <div class="lcount"><b id="lcN">0</b><span id="lcTxt" class="muted"></span><span style="flex:1"></span><button class="line small" id="lfClear" data-t="clear"></button><button class="line small" id="lfCsv" data-t="exportCsv"></button></div>
     <div class="card"><div class="tablewrap"><table>
-      <thead><tr><th><input type="checkbox" id="all"></th><th data-t="thDate"></th><th data-t="thName"></th><th data-t="thContact"></th><th data-t="thType"></th><th data-t="thLang"></th><th data-t="thCampaign"></th><th>UTM Source</th><th>UTM Medium</th><th>UTM Campaign</th><th>UTM Content</th><th>UTM Term</th><th data-t="thInm"></th><th></th></tr></thead>
+      <thead><tr><th><input type="checkbox" id="all"></th><th data-t="thDate"></th><th data-t="thName"></th><th data-t="thContact"></th><th data-t="thType"></th><th data-t="thLang"></th><th data-t="thCampaign"></th><th>UTM Source</th><th>UTM Medium</th><th>UTM Campaign</th><th data-t="thInm"></th><th></th></tr></thead>
       <tbody id="leads"></tbody>
     </table></div></div>
     <p class="help" data-th="importHelp"></p>
@@ -344,7 +342,7 @@
       block(t("bSource"), ev("pv", [["google", t("sGoogle")], ["ext", t("sExt")], ["direct", t("sDirect")]]));
   }
 
-  var LF = { campaign: "", utm_source: "", utm_medium: "", utm_campaign: "", utm_content: "", utm_term: "", typology: "", language: "" };
+  var LF = { campaign: "", utm_source: "", utm_medium: "", utm_campaign: "", typology: "", language: "" };
   var EMPTY = "\u0000";
   function leadVal(l, k) { return String((l.data || {})[k] || ""); }
   function filteredLeads(skipKey) {
@@ -387,9 +385,9 @@
       var d = l.data || {}, s2 = l.status, can = s2 !== "sent";
       var badge = s2 === "sent" ? '<span class="badge b-sent">' + t("sent") + "</span>" : s2 === "failed" ? '<span class="badge b-failed">' + t("failed") + "</span>" : '<span class="badge b-imported">' + t("imported") + "</span>";
       return "<tr><td>" + (can ? '<input type="checkbox" data-id="' + esc(l.id) + '"' + (selected[l.id] ? " checked" : "") + ' aria-label="' + t("select") + '">' : "") + "</td><td>" + esc(fmt(l.created_at)) + "</td><td>" + esc(d.name) + "</td><td>" + esc(d.email) + '<br><span class="muted small">' + esc(d.phone) + "</span></td><td>" + esc(d.typology) + "</td><td>" + esc((d.language || "").toUpperCase()) + "</td>" +
-        cell(d.campaign) + cell(d.utm_source) + cell(d.utm_medium) + cell(d.utm_campaign) + cell(d.utm_content) + cell(d.utm_term) +
+        cell(d.campaign) + cell(d.utm_source) + cell(d.utm_medium) + cell(d.utm_campaign) +
         "<td>" + badge + (s2 === "failed" ? '<span class="errtxt">' + esc(l.error) + "</span>" : "") + "</td><td>" + (can ? '<button class="line small" data-resend="' + esc(l.id) + '">' + t("resend") + "</button>" : "") + "</td></tr>";
-    }).join("") : '<tr><td colspan="14" class="muted">' + t("noLeads") + t("inFilter") + ".</td></tr>";
+    }).join("") : '<tr><td colspan="12" class="muted">' + t("noLeads") + t("inFilter") + ".</td></tr>";
     updateSel();
   }
 
@@ -403,7 +401,7 @@
     renderLeads();
   });
   $("lfCsv").addEventListener("click", function () {
-    var cols = ["created_at", "name", "email", "phone", "typology", "property_ref", "language", "origin", "location", "source", "campaign", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "within_budget", "move_in_timing", "status", "error"];
+    var cols = ["created_at", "name", "email", "phone", "typology", "property_ref", "language", "origin", "location", "source", "campaign", "utm_source", "utm_medium", "utm_campaign", "within_budget", "move_in_timing", "status", "error"];
     var q = function (v) { v = String(v == null ? "" : v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
     var lines = [cols.join(",")].concat(filteredLeads().map(function (l) {
       var d = l.data || {};
